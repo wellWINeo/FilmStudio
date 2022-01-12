@@ -1,0 +1,13 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace FilmStudio.Models;
+
+public class FilmSet
+{
+    [Key]
+    public int FilmSetId { get; set; }
+    public string Location { get; set; }
+    public virtual Movie Movie { get; set; }
+
+}
