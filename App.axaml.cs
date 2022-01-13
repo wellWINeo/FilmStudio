@@ -15,12 +15,14 @@ namespace FilmStudio
 
         public override void OnFrameworkInitializationCompleted()
         {
+            var db = new ApplicationContext();
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = new MainWindowViewModel(new EmployeeViewModel(),
-                                                        new CastingListViewModel()),
+
+                    DataContext = new MainWindowViewModel(new EmployeeViewModel(db),
+                                                        new CastingListViewModel(db)),
                 };
             }
 

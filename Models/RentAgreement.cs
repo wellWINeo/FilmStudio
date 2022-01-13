@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FilmStudio.Models;
 
@@ -7,8 +8,10 @@ public class RentAgreement
 {
     [Key]
     public int RentAgreementId { get; set; }
-    public DateOnly RentStartDate { get; set; }
-    public DateOnly RentEndDate { get; set; }
+    [Column(TypeName = "Date")]
+    public DateTime RentStartDate { get; set; }
+    [Column(TypeName = "Date")]
+    public DateTime RentEndDate { get; set; }
     public decimal Amount { get; set; }
     public virtual Cinema Cinema { get; set; }
     public virtual Movie Movie { get; set; }

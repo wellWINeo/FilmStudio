@@ -1,22 +1,69 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="using:FilmStudio.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="FilmStudio.Views.EmployeeView">
-  <Design.DataContext>
-    <vm:EmployeeViewModel />
-  </Design.DataContext>
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:vm="using:FilmStudio.ViewModels" mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" x:Class="FilmStudio.Views.EmployeeView">
+	<StackPanel>
+		<DataGrid x:Name="EmployeesGrid" AutoGenerateColumns="True" BorderBrush="red"></DataGrid>
+		<!-- from to add new user -->
+		<StackPanel Margin="0,15" IsVisible="True">
+			<TextBlock FontWeight="Bold" FontSize="23">Add new Employee:</TextBlock>
+			<Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+				<!-- Row #1, for x:Name -->
+				<TextBlock Grid.Row="0" Grid.Column="0" Margin="10,10,10,10">
+                Name:
+      	</TextBlock>
+				<StackPanel Grid.Row="0" Grid.Column="1">
+					<TextBox x:Name="EmployeeNameBox" x:FieldModifier="public" Margin="10,10,10,10" />
+					<TextBlock x:Name="EmployeeNameBoxValidation" Foreground="red" FontSize="12" />
+				</StackPanel>
 
-  <StackPanel>
-    <TextBlock>Employees:</TextBlock>
-    <Grid>
-      <DataGrid Name="EmployeesGrid" 
-                Items="{Binding Employees}" 
-                AutoGenerateColumns="True"
-                BorderBrush="red" >
-      </DataGrid>
-    </Grid>
-  </StackPanel>
+				<!-- Row #2, for Surname -->
+				<TextBlock Grid.Row="1" Grid.Column="0" Margin="10,10,10,10">
+                 Surname:
+      			</TextBlock>
+				<StackPanel Grid.Row="1" Grid.Column="1">
+					<TextBox x:Name="EmployeeSurnameBox" Margin="10,10,10,10" />
+					<TextBlock x:Name="EmployeeSurnameBoxValidation" Foreground="red" FontSize="12" />
+				</StackPanel>
+
+				<!-- Row #3, for Patronymic -->
+				<TextBlock Grid.Row="2" Grid.Column="0" Margin="10,10,10,10">
+                 Patronymic:
+      			</TextBlock>
+				<StackPanel Grid.Row="2" Grid.Column="1">
+					<TextBox x:Name="EmployeePatronymicBox" Margin="10,10,10,10" />
+					<TextBlock x:Name="EmployeePatronymicBoxValidation" Foreground="red" FontSize="12" />
+				</StackPanel>
+
+				<!-- Row #4, for Salary -->
+				<TextBlock Grid.Row="3" Grid.Column="0" Margin="10,10,10,10">Patronymic:</TextBlock>
+				<StackPanel Grid.Row="3" Grid.Column="1">
+					<TextBock x:Name="EmployeeSalaryBox" Margin="10,10,10,10" />
+					<TextBlock x:Name="EmployeeSalaryBoxValidation" Foreground="red" FontSize="12" />
+				</StackPanel>
+
+				<!-- Row #5, for Birth Date -->
+				<DatePicker x:Name="EmployeeBirthDatePicker" Grid.Row="4" Header="Date of Birth" />
+
+				<!-- Row #6, for PassportNumber -->
+				<TextBlock Grid.Row="5" Grid.Column="0" Margin="10,10,10,10">Patronymic:</TextBlock>
+				<StackPanel Grid.Row="5" Grid.Column="1">
+					<TextBox x:Name="EmployeePassportNumberBox" Margin="10,10,10,10" />
+					<TextBlock x:Name="EmployeePassportNumberBoxValidation" Foreground="red" FontSize="12" />
+				</StackPanel>
+
+				<!-- Row #7, for SNILS -->
+				<TextBlock Grid.Row="6" Grid.Column="0" Margin="10,10,10,10">Patronymic:</TextBlock>
+				<StackPanel Grid.Row="6" Grid.Column="1">
+					<TextBox x:Name="EmployeeSNILSBox" Margin="10,10,10,10" />
+					<TextBlock x:Name="EmployeeSNILSBoxValidation" Foreground="red" FontSize="12" />
+				</StackPanel>
+
+				<!-- Row #8, for SNILS -->
+				<TextBlock Grid.Row="7" Grid.Column="0" Margin="10,10,10,10">Patronymic:</TextBlock>
+				<StackPanel Grid.Row="7" Grid.Column="1">
+					<TextBox x:Name="EmployeeINNBox" Margin="10,10,10,10" />
+					<TextBlock x:Name="EmployeeINNBoxValidation" Foreground="red" FontSize="12" />
+				</StackPanel>
+			</Grid>
+		</StackPanel>
+		<Button IsEnabled="True">Add user</Button>
+	</StackPanel>
 </UserControl>

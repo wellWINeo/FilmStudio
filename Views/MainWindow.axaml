@@ -23,10 +23,22 @@
         <TabItem Header="Casting list" VerticalContentAlignment="Center">
           <local:CastingListView DataContext="{Binding castingListViewModel}" />
         </TabItem>
-        <TabItem>
-          <TabItem.Header>
-            <TextBlock VerticalAlignment="Center">Square</TextBlock>
-          </TabItem.Header>
+        <TabItem Header="Film sets" VerticalContentAlignment="Center">
+          <local:CircleView />
+        </TabItem>
+        <TabItem Header="Footages" VerticalContentAlignment="Center">
+          <local:CircleView />
+        </TabItem>
+        <TabItem Header="Accounting" VerticalContentAlignment="Center">
+          <local:CircleView />
+        </TabItem>
+        <TabItem Header="Movies" VerticalContentAlignment="Center">
+          <local:CircleView />
+        </TabItem>
+        <TabItem Header="Cinemas" VerticalContentAlignment="Center">
+          <local:CircleView />
+        </TabItem>
+        <TabItem Header="Ad" VerticalContentAlignment="Center">
           <local:CircleView />
         </TabItem>
       </TabControl>

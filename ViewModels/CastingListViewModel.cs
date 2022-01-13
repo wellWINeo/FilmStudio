@@ -11,9 +11,9 @@ public class CastingListViewModel : ViewModelBase
 
     public ObservableCollection<CastingList> castingLists { get; set; }
 
-    public CastingListViewModel()
+    public CastingListViewModel(ApplicationContext _db)
     {
-        db = new ApplicationContext();
+        db = _db;
         castingLists = new ObservableCollection<CastingList>()
         {
             new CastingList{},
