@@ -1,57 +1,48 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
-using Avalonia.Data;
 using FilmStudio.Models;
-using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
-using ReactiveUI.Validation.Abstractions;
-using ReactiveUI.Validation.Contexts;
 using ReactiveUI.Validation.Extensions;
 using ReactiveUI.Validation.Helpers;
-using ReactiveUI.Validation.States;
 using ReactiveUI.Fody.Helpers;
 using System.Text.RegularExpressions;
+using Avalonia.Interactivity;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
+using DynamicData;
+using DynamicData.Binding;
 
 namespace FilmStudio.ViewModels;
 
-public class EmployeeViewModel : ReactiveValidationObject
+public class EmployeeViewModel : ViewModelBase
 {
     private ApplicationContext db;
 
-    private bool isAddUserMode = false;
-    public bool IsAddUserMode
-    {
-        get => isAddUserMode;
-        set => this.RaiseAndSetIfChanged(ref isAddUserMode, value);
-    }
+    // Commands
+    public ReactiveCommand<Unit, Unit> AddUserCommand { get; }
+    public ReactiveCommand<int, Unit> UpdateUserCommand { get; }
+    public ReactiveCommand<int, Unit> DeleteUserCommand { get; }
 
-    public IEnumerable<Employee> Employees { get; set; }
+    [Reactive] public ObservableCollectionExtended<Employee> Employees { get; set; }
 
-    public ReactiveCommand<Unit, Unit> EnterAddUserMode { get; }
+    [Reactive] public int EmployeeSelectedIndex { get; set; }
 
-    // Employee attributes
-    // private string _name;
-    [Reactive]
-    public string Name { get; set; } = string.Empty;
-
-    // private string _surname;
-    [Reactive]
-    public string Surname { get; set; } = string.Empty;
-
-    public string Patronymic { get; set; }
-    public decimal Salary { get; set; }
-    public DateTimeOffset? BirthDate { get; set; }
-    public string PassportNumber { get; set; }
-    public string SNILS { get; set; }
-    public string INN { get; set; }
+    // protperties for Employee model
+    [Reactive] public string Name { get; set; } = string.Empty;
+    [Reactive] public string Surname { get; set; } = string.Empty;
+    [Reactive] public string Patronymic { get; set; } = "-";
+    [Reactive] public decimal Salary { get; set; } = 0.0M;
+    [Reactive] public DateTimeOffset? BirthDate { get; set; } = DateTimeOffset.Now;
+    [Reactive] public string PassportNumber { get; set; } = string.Empty;
+    [Reactive] public string SNILS { get; set; } = string.Empty;
+    [Reactive] public string INN { get; set; } = string.Empty;
 
     public EmployeeViewModel(ApplicationContext _db)
     {
         db = _db;
-        Employees = db.Employees.AsEnumerable();
+        Employees = new(db.Employees);
         // Employees = new ObservableCollection<Employee>()
         // {
         //     new Employee {Name="Name1", Surname="Surname1", Patronymic="Patronymic1"},
@@ -59,7 +50,7 @@ public class EmployeeViewModel : ReactiveValidationObject
         //     new Employee {Name="Name3", Surname="Surname3", Patronymic="Patronymic3"},
         // };
 
-        // configure validation
+        // configure validation rules
         this.ValidationRule(
             vm => vm.Name,
             name => !string.IsNullOrWhiteSpace(name),
@@ -109,30 +100,41 @@ public class EmployeeViewModel : ReactiveValidationObject
         );
 
         // init commands
-        EnterAddUserMode = ReactiveCommand.Create(enterAddUserMode);
+        AddUserCommand = ReactiveCommand.Create(_addUserCommand, this.IsValid());
+        UpdateUserCommand = ReactiveCommand.Create<int>(_updateUserCommand);
+        DeleteUserCommand = ReactiveCommand.Create<int>(_deleteUserCommand);
     }
 
-    private async void enterAddUserMode()
+    private async void _addUserCommand()
     {
-        if (IsAddUserMode)
+        var employee = new Employee
         {
-            var employee = new Employee
-            {
-                Name = Name,
-                Surname = Surname,
-                Patronymic = Patronymic,
-                Salary = Salary,
-                PassportNumber = PassportNumber,
-                BirthDate = ((DateTimeOffset)BirthDate).DateTime,
-                SNILS = SNILS,
-                INN = INN
-            };
-            await db.Employees.AddAsync(employee);
-            await db.SaveChangesAsync();
-        }
+            Name = Name,
+            Surname = Surname,
+            Patronymic = Patronymic,
+            Salary = Salary,
+            PassportNumber = PassportNumber,
+            BirthDate = ((DateTimeOffset)BirthDate).DateTime,
+            SNILS = SNILS,
+            INN = INN
+        };
 
-        // Show/hide add form
-        IsAddUserMode = !IsAddUserMode;
+        await db.Employees.AddAsync(employee);
+        await db.SaveChangesAsync();
+        Employees.Add(employee);
     }
 
+    private void _updateUserCommand(int index)
+    {
+        // TODO: validation
+        db.Employees.Update(Employees[EmployeeSelectedIndex]);
+        db.SaveChanges();
+    }
+
+    private void _deleteUserCommand(int index)
+    {
+        db.Employees.Remove(Employees[EmployeeSelectedIndex]);
+        Employees.RemoveAt(EmployeeSelectedIndex);
+        db.SaveChanges();
+    }
 }

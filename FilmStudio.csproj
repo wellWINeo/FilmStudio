@@ -6,7 +6,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Models\" />
-    <AvaloniaResource Include="Assets\**" />
+    <!-- <AvaloniaResource Include="Assets\**" /> -->
     <None Remove=".gitignore" />
   </ItemGroup>
   <ItemGroup>
@@ -20,18 +20,19 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
+    <PackageReference Include="ReactiveUI" Version="17.1.17" />
     <PackageReference Include="ReactiveUI.Fody" Version="17.1.17" />
     <PackageReference Include="ReactiveUI.Validation" Version="2.2.1" />
     <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="**\*.axaml.cs">
+    <Compile Update="**\*.xaml.cs">
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="**\*.axaml">
+    <EmbeddedResource Include="**\*axaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <!-- This AdditionalFiles directive is required by XamlNameReferenceGenerator. -->
-    <AdditionalFiles Include="**\*.axaml" />
+    <AdditionalFiles Include="**\*.xaml" />
   </ItemGroup>
 </Project>

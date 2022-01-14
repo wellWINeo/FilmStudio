@@ -1,16 +1,44 @@
 <UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:vm="using:FilmStudio.ViewModels" mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" x:Class="FilmStudio.Views.EmployeeView">
 	<StackPanel>
-		<DataGrid x:Name="EmployeesGrid" AutoGenerateColumns="True" BorderBrush="red"></DataGrid>
+		<!-- grid with data from db -->
+		<DataGrid x:Name="EmployeesGrid" AutoGenerateColumns="False" BorderBrush="red">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="ID" Binding="{Binding EmployeeId}" />
+				<DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+				<DataGridTextColumn Header="Surname" Binding="{Binding Surname}" />
+				<DataGridTextColumn Header="Patronymic" Binding="{Binding Patronymic}" />
+				<DataGridTextColumn Header="Salary" Binding="{Binding Salary}" />
+				<DataGridTextColumn Header="Date of Birth" Binding="{Binding BirthDate}" />
+				<DataGridTextColumn Header="Passport Number" Binding="{Binding PassportNumber}" />
+				<DataGridTextColumn Header="SNILS" Binding="{Binding SNILS}" />
+				<DataGridTextColumn Header="INN" Binding="{Binding INN}" />
+				<DataGridTextColumn Header="Working on movies" Binding="{Binding Movies}" />
+				<!-- <DataGridTemplateColumn Header="Delete">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Button x:Name="DeleteButton">Delete</Button>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn> -->
+			</DataGrid.Columns>
+		</DataGrid>
+
+		<!-- button to show/hide form & delete button -->
+		<StackPanel Orientation="Horizontal">
+			<Button x:Name="ShowHideFormButton" Click="OnShowHideFormButtonClick">Show</Button>
+			<Button x:Name="DeleteButton">Delete selected row</Button>
+		</StackPanel>
+
 		<!-- from to add new user -->
-		<StackPanel Margin="0,15" IsVisible="True">
+		<StackPanel x:Name="AddUserForm" Margin="0,15">
 			<TextBlock FontWeight="Bold" FontSize="23">Add new Employee:</TextBlock>
-			<Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+			<Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
 				<!-- Row #1, for x:Name -->
 				<TextBlock Grid.Row="0" Grid.Column="0" Margin="10,10,10,10">
                 Name:
-      	</TextBlock>
+      			</TextBlock>
 				<StackPanel Grid.Row="0" Grid.Column="1">
-					<TextBox x:Name="EmployeeNameBox" x:FieldModifier="public" Margin="10,10,10,10" />
+					<TextBox x:Name="EmployeeNameBox" Margin="10,10,10,10" />
 					<TextBlock x:Name="EmployeeNameBoxValidation" Foreground="red" FontSize="12" />
 				</StackPanel>
 
@@ -29,13 +57,13 @@
       			</TextBlock>
 				<StackPanel Grid.Row="2" Grid.Column="1">
 					<TextBox x:Name="EmployeePatronymicBox" Margin="10,10,10,10" />
-					<TextBlock x:Name="EmployeePatronymicBoxValidation" Foreground="red" FontSize="12" />
+					<!-- <TextBlock x:Name="EmployeePatronymicBoxValidation" Foreground="red" FontSize="12" /> -->
 				</StackPanel>
 
 				<!-- Row #4, for Salary -->
-				<TextBlock Grid.Row="3" Grid.Column="0" Margin="10,10,10,10">Patronymic:</TextBlock>
+				<TextBlock Grid.Row="3" Grid.Column="0" Margin="10,10,10,10">Salary:</TextBlock>
 				<StackPanel Grid.Row="3" Grid.Column="1">
-					<TextBock x:Name="EmployeeSalaryBox" Margin="10,10,10,10" />
+					<NumericUpDown x:Name="EmployeeSalaryBox" Margin="10,10,10,10" />
 					<TextBlock x:Name="EmployeeSalaryBoxValidation" Foreground="red" FontSize="12" />
 				</StackPanel>
 
@@ -43,27 +71,27 @@
 				<DatePicker x:Name="EmployeeBirthDatePicker" Grid.Row="4" Header="Date of Birth" />
 
 				<!-- Row #6, for PassportNumber -->
-				<TextBlock Grid.Row="5" Grid.Column="0" Margin="10,10,10,10">Patronymic:</TextBlock>
+				<TextBlock Grid.Row="5" Grid.Column="0" Margin="10,10,10,10">Passport number:</TextBlock>
 				<StackPanel Grid.Row="5" Grid.Column="1">
 					<TextBox x:Name="EmployeePassportNumberBox" Margin="10,10,10,10" />
 					<TextBlock x:Name="EmployeePassportNumberBoxValidation" Foreground="red" FontSize="12" />
 				</StackPanel>
 
 				<!-- Row #7, for SNILS -->
-				<TextBlock Grid.Row="6" Grid.Column="0" Margin="10,10,10,10">Patronymic:</TextBlock>
+				<TextBlock Grid.Row="6" Grid.Column="0" Margin="10,10,10,10">SNILS:</TextBlock>
 				<StackPanel Grid.Row="6" Grid.Column="1">
 					<TextBox x:Name="EmployeeSNILSBox" Margin="10,10,10,10" />
 					<TextBlock x:Name="EmployeeSNILSBoxValidation" Foreground="red" FontSize="12" />
 				</StackPanel>
 
-				<!-- Row #8, for SNILS -->
-				<TextBlock Grid.Row="7" Grid.Column="0" Margin="10,10,10,10">Patronymic:</TextBlock>
+				<!-- Row #8, for INN -->
+				<TextBlock Grid.Row="7" Grid.Column="0" Margin="10,10,10,10">INN:</TextBlock>
 				<StackPanel Grid.Row="7" Grid.Column="1">
 					<TextBox x:Name="EmployeeINNBox" Margin="10,10,10,10" />
 					<TextBlock x:Name="EmployeeINNBoxValidation" Foreground="red" FontSize="12" />
 				</StackPanel>
 			</Grid>
+			<Button x:Name="AddUserButton" IsEnabled="True">Add user</Button>
 		</StackPanel>
-		<Button IsEnabled="True">Add user</Button>
 	</StackPanel>
 </UserControl>

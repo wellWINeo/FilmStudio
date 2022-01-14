@@ -7,26 +7,62 @@ using Avalonia.ReactiveUI;
 using ReactiveUI;
 using ReactiveUI.Validation.Extensions;
 using FilmStudio.ViewModels;
+using Avalonia.Interactivity;
+using FilmStudio.Helpers;
 
 namespace FilmStudio.Views
 {
     public partial class EmployeeView : ReactiveUserControl<EmployeeViewModel>
     {
+        private bool _isAddUserMode = false;
+        public bool IsAddUserMode
+        {
+            get => _isAddUserMode;
+            set
+            {
+                _isAddUserMode = value;
+                this.AddUserForm.IsVisible = _isAddUserMode;
+            }
+        }
+
         public EmployeeView()
         {
             AvaloniaXamlLoader.Load(this);
             InitializeComponent();
             this.WhenActivated(disposables =>
             {
+
+                // bind commands
+                this.BindCommand(ViewModel, vm => vm.AddUserCommand, view => view.AddUserButton)
+                    .DisposeWith(disposables);
+                this.BindCommand(ViewModel, vm => vm.UpdateUserCommand, view => view.EmployeesGrid,
+                    vm => vm.EmployeeSelectedIndex, "RowEditEnded").DisposeWith(disposables);
+                this.BindCommand(ViewModel, vm => vm.DeleteUserCommand, view => view.DeleteButton,
+                    vm => vm.EmployeeSelectedIndex).DisposeWith(disposables);
+
+
+                /* 
+                // default binds
+                */
+                this.Bind(ViewModel, vm => vm.Employees, view => view.EmployeesGrid.Items,
+                    vmToViewConverterOverride: new EmployeesConverter(),
+                    viewToVMConverterOverride: new EmployeesConverter())
+                    .DisposeWith(disposables);
+                // this.Bind(ViewModel, vm => vm.Employees, view => view.EmployeesGrid.Items)
+                //     .DisposeWith(disposables);
+                this.Bind(ViewModel, vm => vm.EmployeeSelectedIndex, view => view.EmployeesGrid.SelectedIndex)
+                    .DisposeWith(disposables);
+
+                // model binds
                 this.Bind(ViewModel, vm => vm.Name, view => view.EmployeeNameBox.Text)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel, vm => vm.Surname, view => view.EmployeeSurnameBox.Text)
                     .DisposeWith(disposables);
-                this.Bind(ViewModel, vm => vm.Patronymic, view => view.EmployeePatronymicBox)
+                this.Bind(ViewModel, vm => vm.Patronymic, view => view.EmployeePatronymicBox.Text)
                     .DisposeWith(disposables);
-                this.Bind(ViewModel, vm => vm.Salary, view => view.EmployeeSalaryBox)
+                this.Bind(ViewModel, vm => vm.Salary, view => view.EmployeeSalaryBox.Text)
                     .DisposeWith(disposables);
-                this.Bind(ViewModel, vm => vm.BirthDate, view => view.EmployeeBirthDatePickerirthDate)
+                this.Bind(ViewModel, vm => vm.BirthDate, view => view.EmployeeBirthDatePicker.SelectedDate)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel, vm => vm.PassportNumber, view => view.EmployeePassportNumberBox.Text)
                     .DisposeWith(disposables);
@@ -35,13 +71,32 @@ namespace FilmStudio.Views
                 this.Bind(ViewModel, vm => vm.INN, view => view.EmployeeINNBox.Text)
                     .DisposeWith(disposables);
 
+                // binds for validation error messages
                 this.BindValidation(ViewModel, vm => vm.Name, view => view.EmployeeNameBoxValidation.Text)
                     .DisposeWith(disposables);
                 this.BindValidation(ViewModel, vm => vm.Surname, view => view.EmployeeSurnameBoxValidation.Text)
                     .DisposeWith(disposables);
-                this.BindValidation(ViewModel, vm => vm.Patronymic, view => view.EmployeePatronymicBox)
+                // this.BindValidation(ViewModel, vm => vm.Patronymic, view => view.EmployeePatronymicBox.Text)
+                //     .DisposeWith(disposables);
+                this.BindValidation(ViewModel, vm => vm.Salary, view => view.EmployeeSalaryBoxValidation.Text)
+                    .DisposeWith(disposables);
+                this.BindValidation(ViewModel, vm => vm.PassportNumber, view => view.EmployeePassportNumberBoxValidation.Text)
+                    .DisposeWith(disposables);
+                this.BindValidation(ViewModel, vm => vm.SNILS, view => view.EmployeeSNILSBoxValidation.Text)
+                    .DisposeWith(disposables);
+                this.BindValidation(ViewModel, vm => vm.INN, view => view.EmployeeINNBoxValidation.Text)
                     .DisposeWith(disposables);
             });
         }
+
+        private void Startup()
+        {
+            AvaloniaXamlLoader.Load(this);
+            this.AddUserForm.IsVisible = IsAddUserMode;
+        }
+
+        private void OnShowHideFormButtonClick(object sender, RoutedEventArgs e)
+            => IsAddUserMode = !IsAddUserMode;
+
     }
 }
