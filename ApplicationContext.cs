@@ -21,10 +21,13 @@ public class ApplicationContext : DbContext
     public DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlServer("Server=127.0.0.1;Initial Catalog=WebBlog;User ID=SA;Password=MyVeryStrongPassword123!;Trusted_Connection=False;MultipleActiveResultSets=true");
+        => options.UseSqlServer("Server=127.0.0.1;Initial Catalog=FilmStudio;User ID=SA;Password=MyVeryStrongPassword123!;Trusted_Connection=False;MultipleActiveResultSets=true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<User>().HasData(
+            new User { UserId = 1, UserName = "admin", Password = "123" }
+        );
     }
 }

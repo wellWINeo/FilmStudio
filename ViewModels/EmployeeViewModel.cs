@@ -128,7 +128,7 @@ public class EmployeeViewModel : ViewModelBase
     private void _updateUserCommand()
     {
         // TODO: validation
-        
+
         Employees[EmployeeSelectedIndex].Name = Name;
         Employees[EmployeeSelectedIndex].Surname = Surname;
         Employees[EmployeeSelectedIndex].Patronymic = Patronymic;
@@ -137,19 +137,7 @@ public class EmployeeViewModel : ViewModelBase
         Employees[EmployeeSelectedIndex].BirthDate = ((DateTimeOffset)BirthDate).DateTime;
         Employees[EmployeeSelectedIndex].SNILS = SNILS;
         Employees[EmployeeSelectedIndex].INN = INN;
-        
-        // var employee = Employees[EmployeeSelectedIndex];
-        // employee.Name = Name;
-        // employee.Surname = Surname;
-        // employee.Patronymic = Patronymic;
-        // employee.Salary = Salary;
-        // employee.PassportNumber = PassportNumber;
-        // employee.BirthDate = ((DateTimeOffset)BirthDate).DateTime;
-        // employee.SNILS = SNILS;
-        // employee.INN = INN;
 
-        // Employees.RemoveAt(EmployeeSelectedIndex);
-        // Employees.Add(employee);
         db.Employees.Update(Employees[EmployeeSelectedIndex]);
         db.SaveChanges();
     }

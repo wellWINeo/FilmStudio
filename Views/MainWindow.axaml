@@ -5,8 +5,8 @@
   </Design.DataContext>
 
   <StackPanel Orientation="Vertical">
-    <!-- <local:LoginView/> -->
-    <TabControl IsVisible="True">
+    <local:LoginView x:Name="LocalLoginView" DataContext="{Binding loginViewModel}" />
+    <TabControl x:Name="MainTabControl" IsVisible="True">
       <TabItem Header="Employees" VerticalContentAlignment="Center">
         <local:EmployeeView DataContext="{Binding employeeViewModel}" />
       </TabItem>

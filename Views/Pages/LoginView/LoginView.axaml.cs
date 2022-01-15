@@ -1,11 +1,15 @@
+using System;
+using System.Reactive.Disposables;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
-using System.Reactive.Disposables;
-using FilmStudio.ViewModels;
-using PropertyChanged;
 using ReactiveUI;
+using ReactiveUI.Validation.Extensions;
+using FilmStudio.ViewModels;
+using Avalonia.Interactivity;
+using FilmStudio.Helpers;
+using PropertyChanged;
 
 namespace FilmStudio.Views
 {
@@ -18,8 +22,6 @@ namespace FilmStudio.Views
             InitializeComponent();
             this.WhenActivated(disposables =>
             {
-                this.Bind(ViewModel, vm => vm.IsNotAuthed, view => view.IsVisible)
-                    .DisposeWith(disposables);
                 this.Bind(ViewModel, vm => vm.UserName, view => view.LoginBox.Text)
                     .DisposeWith(disposables);
                 this.Bind(ViewModel, vm => vm.Password, view => view.PasswordBox.Text)

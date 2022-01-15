@@ -24,7 +24,8 @@ namespace FilmStudio
                 {
 
                     DataContext = new MainWindowViewModel(new EmployeeViewModel(db),
-                                                        new CastingListViewModel(db)),
+                                                        new CastingListViewModel(db),
+                                                        new LoginViewModel(db)),
                 };
             }
 

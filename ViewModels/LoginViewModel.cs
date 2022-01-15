@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Reactive;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -22,7 +23,9 @@ public class LoginViewModel : ViewModelBase
 
     private void _login()
     {
-        if (!string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password))
-            IsNotAuthed = false;
+        // if (!string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password))
+        //     IsNotAuthed = false;
+        IsNotAuthed = db.Users.Where(u => u.UserName == UserName &&
+            u.Password == Password).FirstOrDefault() == null;
     }
 }
