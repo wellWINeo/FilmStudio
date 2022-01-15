@@ -9,9 +9,11 @@ using ReactiveUI.Validation.Extensions;
 using FilmStudio.ViewModels;
 using Avalonia.Interactivity;
 using FilmStudio.Helpers;
+using PropertyChanged;
 
 namespace FilmStudio.Views
 {
+    [DoNotNotify]
     public partial class EmployeeView : ReactiveUserControl<EmployeeViewModel>
     {
         private bool _isAddUserMode = false;
@@ -35,8 +37,8 @@ namespace FilmStudio.Views
                 // bind commands
                 this.BindCommand(ViewModel, vm => vm.AddUserCommand, view => view.AddUserButton)
                     .DisposeWith(disposables);
-                this.BindCommand(ViewModel, vm => vm.UpdateUserCommand, view => view.EmployeesGrid,
-                    vm => vm.EmployeeSelectedIndex, "RowEditEnded").DisposeWith(disposables);
+                this.BindCommand(ViewModel, vm => vm.UpdateUserCommand, view => view.UpdateUserButton)
+                    .DisposeWith(disposables);
                 this.BindCommand(ViewModel, vm => vm.DeleteUserCommand, view => view.DeleteButton,
                     vm => vm.EmployeeSelectedIndex).DisposeWith(disposables);
 
@@ -97,6 +99,18 @@ namespace FilmStudio.Views
 
         private void OnShowHideFormButtonClick(object sender, RoutedEventArgs e)
             => IsAddUserMode = !IsAddUserMode;
+
+        private void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ViewModel.Name = ViewModel.Employees[EmployeesGrid.SelectedIndex].Name;
+            ViewModel.Surname = ViewModel.Employees[EmployeesGrid.SelectedIndex].Surname;
+            ViewModel.Patronymic = ViewModel.Employees[EmployeesGrid.SelectedIndex].Patronymic;
+            ViewModel.Salary = ViewModel.Employees[EmployeesGrid.SelectedIndex].Salary;
+            ViewModel.BirthDate = ViewModel.Employees[EmployeesGrid.SelectedIndex].BirthDate;
+            ViewModel.PassportNumber = ViewModel.Employees[EmployeesGrid.SelectedIndex].PassportNumber;
+            ViewModel.SNILS = ViewModel.Employees[EmployeesGrid.SelectedIndex].SNILS;
+            ViewModel.INN = ViewModel.Employees[EmployeesGrid.SelectedIndex].INN;
+        }
 
     }
 }

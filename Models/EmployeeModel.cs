@@ -1,16 +1,22 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using ReactiveUI;
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
+using PropertyChanged;
+using ReactiveUI.Fody.Helpers;
 
 namespace FilmStudio.Models;
 
-public class Employee
+
+public class Employee : INotifyPropertyChanged
 {
+    public event PropertyChangedEventHandler PropertyChanged;
+    
     [Key]
     public int EmployeeId { get; set; }
-
     public string Name { get; set; }
     public string Surname { get; set; }
     public string Patronymic { get; set; }

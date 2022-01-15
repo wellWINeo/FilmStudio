@@ -1,9 +1,11 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using PropertyChanged;
 
 namespace FilmStudio.Views
 {
+    [DoNotNotify]
     public partial class MainWindow : Window
     {
         public MainWindow()

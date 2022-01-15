@@ -3,9 +3,11 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using FilmStudio.ViewModels;
 using FilmStudio.Views;
+using PropertyChanged;
 
 namespace FilmStudio
 {
+    [DoNotNotify]
     public class App : Application
     {
         public override void Initialize()

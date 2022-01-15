@@ -16,16 +16,17 @@ using DynamicData.Binding;
 
 namespace FilmStudio.ViewModels;
 
+// FIXME: grid after row adds updates only after scroll
 public class EmployeeViewModel : ViewModelBase
 {
     private ApplicationContext db;
 
     // Commands
     public ReactiveCommand<Unit, Unit> AddUserCommand { get; }
-    public ReactiveCommand<int, Unit> UpdateUserCommand { get; }
-    public ReactiveCommand<int, Unit> DeleteUserCommand { get; }
+    public ReactiveCommand<Unit, Unit> UpdateUserCommand { get; }
+    public ReactiveCommand<Unit, Unit> DeleteUserCommand { get; }
 
-    [Reactive] public ObservableCollectionExtended<Employee> Employees { get; set; }
+    public ObservableCollection<Employee> Employees { get; set; }
 
     [Reactive] public int EmployeeSelectedIndex { get; set; }
 
@@ -101,8 +102,8 @@ public class EmployeeViewModel : ViewModelBase
 
         // init commands
         AddUserCommand = ReactiveCommand.Create(_addUserCommand, this.IsValid());
-        UpdateUserCommand = ReactiveCommand.Create<int>(_updateUserCommand);
-        DeleteUserCommand = ReactiveCommand.Create<int>(_deleteUserCommand);
+        UpdateUserCommand = ReactiveCommand.Create(_updateUserCommand, this.IsValid());
+        DeleteUserCommand = ReactiveCommand.Create(_deleteUserCommand);
     }
 
     private async void _addUserCommand()
@@ -124,14 +125,36 @@ public class EmployeeViewModel : ViewModelBase
         Employees.Add(employee);
     }
 
-    private void _updateUserCommand(int index)
+    private void _updateUserCommand()
     {
         // TODO: validation
+        
+        Employees[EmployeeSelectedIndex].Name = Name;
+        Employees[EmployeeSelectedIndex].Surname = Surname;
+        Employees[EmployeeSelectedIndex].Patronymic = Patronymic;
+        Employees[EmployeeSelectedIndex].Salary = Salary;
+        Employees[EmployeeSelectedIndex].PassportNumber = PassportNumber;
+        Employees[EmployeeSelectedIndex].BirthDate = ((DateTimeOffset)BirthDate).DateTime;
+        Employees[EmployeeSelectedIndex].SNILS = SNILS;
+        Employees[EmployeeSelectedIndex].INN = INN;
+        
+        // var employee = Employees[EmployeeSelectedIndex];
+        // employee.Name = Name;
+        // employee.Surname = Surname;
+        // employee.Patronymic = Patronymic;
+        // employee.Salary = Salary;
+        // employee.PassportNumber = PassportNumber;
+        // employee.BirthDate = ((DateTimeOffset)BirthDate).DateTime;
+        // employee.SNILS = SNILS;
+        // employee.INN = INN;
+
+        // Employees.RemoveAt(EmployeeSelectedIndex);
+        // Employees.Add(employee);
         db.Employees.Update(Employees[EmployeeSelectedIndex]);
         db.SaveChanges();
     }
 
-    private void _deleteUserCommand(int index)
+    private void _deleteUserCommand()
     {
         db.Employees.Remove(Employees[EmployeeSelectedIndex]);
         Employees.RemoveAt(EmployeeSelectedIndex);
