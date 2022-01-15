@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Reactive;
+using Avalonia.Data;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -21,11 +22,7 @@ public class LoginViewModel : ViewModelBase
         Login = ReactiveCommand.Create(_login);
     }
 
-    private void _login()
-    {
-        // if (!string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password))
-        //     IsNotAuthed = false;
+    private void _login() =>
         IsNotAuthed = db.Users.Where(u => u.UserName == UserName &&
             u.Password == Password).FirstOrDefault() == null;
-    }
 }

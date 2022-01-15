@@ -5,31 +5,30 @@ using FilmStudio.ViewModels;
 using FilmStudio.Views;
 using PropertyChanged;
 
-namespace FilmStudio
+namespace FilmStudio;
+
+[DoNotNotify]
+public class App : Application
 {
-    [DoNotNotify]
-    public class App : Application
+    public override void Initialize()
     {
-        public override void Initialize()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+        AvaloniaXamlLoader.Load(this);
+    }
 
-        public override void OnFrameworkInitializationCompleted()
+    public override void OnFrameworkInitializationCompleted()
+    {
+        var db = new ApplicationContext();
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var db = new ApplicationContext();
-            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            desktop.MainWindow = new MainWindow
             {
-                desktop.MainWindow = new MainWindow
-                {
 
-                    DataContext = new MainWindowViewModel(new EmployeeViewModel(db),
-                                                        new CastingListViewModel(db),
-                                                        new LoginViewModel(db)),
-                };
-            }
-
-            base.OnFrameworkInitializationCompleted();
+                DataContext = new MainWindowViewModel(new EmployeeViewModel(db),
+                                                    new CastingListViewModel(db),
+                                                    new LoginViewModel(db)),
+            };
         }
+
+        base.OnFrameworkInitializationCompleted();
     }
 }

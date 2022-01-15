@@ -4,9 +4,5 @@ using System.Text;
 using ReactiveUI;
 using ReactiveUI.Validation.Helpers;
 
-namespace FilmStudio.ViewModels
-{
-    public class ViewModelBase : ReactiveValidationObject
-    {
-    }
-}
+namespace FilmStudio.ViewModels;
+public class ViewModelBase : ReactiveValidationObject { }

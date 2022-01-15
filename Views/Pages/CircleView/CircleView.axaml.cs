@@ -3,19 +3,17 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using PropertyChanged;
 
-namespace FilmStudio.Views
+namespace FilmStudio.Views;
+[DoNotNotify]
+public partial class CircleView : UserControl
 {
-    [DoNotNotify]
-    public partial class CircleView : UserControl
+    public CircleView()
     {
-        public CircleView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
     }
 }

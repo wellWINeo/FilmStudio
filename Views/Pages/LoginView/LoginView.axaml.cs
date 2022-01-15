@@ -11,24 +11,23 @@ using Avalonia.Interactivity;
 using FilmStudio.Helpers;
 using PropertyChanged;
 
-namespace FilmStudio.Views
+namespace FilmStudio.Views;
+
+[DoNotNotify]
+public partial class LoginView : ReactiveUserControl<LoginViewModel>
 {
-    [DoNotNotify]
-    public partial class LoginView : ReactiveUserControl<LoginViewModel>
+    public LoginView()
     {
-        public LoginView()
+        AvaloniaXamlLoader.Load(this);
+        InitializeComponent();
+        this.WhenActivated(disposables =>
         {
-            AvaloniaXamlLoader.Load(this);
-            InitializeComponent();
-            this.WhenActivated(disposables =>
-            {
-                this.Bind(ViewModel, vm => vm.UserName, view => view.LoginBox.Text)
-                    .DisposeWith(disposables);
-                this.Bind(ViewModel, vm => vm.Password, view => view.PasswordBox.Text)
-                    .DisposeWith(disposables);
-                this.BindCommand(ViewModel, vm => vm.Login, view => view.LoginButton)
-                    .DisposeWith(disposables);
-            });
-        }
+            this.Bind(ViewModel, vm => vm.UserName, view => view.LoginBox.Text)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel, vm => vm.Password, view => view.PasswordBox.Text)
+                .DisposeWith(disposables);
+            this.BindCommand(ViewModel, vm => vm.Login, view => view.LoginButton)
+                .DisposeWith(disposables);
+        });
     }
 }

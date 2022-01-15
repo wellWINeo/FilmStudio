@@ -11,22 +11,20 @@ using Avalonia.Interactivity;
 using FilmStudio.Helpers;
 using PropertyChanged;
 
-namespace FilmStudio.Views
+namespace FilmStudio.Views;
+[DoNotNotify]
+public partial class CastingListView : ReactiveUserControl<CastingListViewModel>
 {
-    [DoNotNotify]
-    public partial class CastingListView : ReactiveUserControl<CastingListViewModel>
+    public CastingListView()
     {
-        public CastingListView()
+        AvaloniaXamlLoader.Load(this);
+        InitializeComponent();
+        this.WhenActivated(disposables =>
         {
-            AvaloniaXamlLoader.Load(this);
-            InitializeComponent();
-            this.WhenActivated(disposables =>
-            {
-                this.Bind(ViewModel, vm => vm.CastingLists, view => view.CastingListGrid.Items,
-                    vmToViewConverterOverride: new EmployeesConverter(),
-                    viewToVMConverterOverride: new EmployeesConverter())
-                    .DisposeWith(disposables);
-            });
-        }
+            this.Bind(ViewModel, vm => vm.CastingLists, view => view.CastingListGrid.Items,
+                vmToViewConverterOverride: new EmployeesConverter(),
+                viewToVMConverterOverride: new EmployeesConverter())
+                .DisposeWith(disposables);
+        });
     }
 }
