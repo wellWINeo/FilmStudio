@@ -10,5 +10,5 @@
 
 ## Bugs
  - [x] DataGrid not updates after item's property change
- - [ ] DataGrid add/remove row apperas after scroll (sometimes)
- - [ ] Reactive bindings throws exception after changing tab
+ - [x] DataGrid add/remove row apperas after scroll (sometimes)
+ - [ ] Reactive bindings doesnt work after changing tab

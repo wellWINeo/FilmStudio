@@ -18,6 +18,7 @@ public class ApplicationContext : DbContext
     public DbSet<Position> Positions { get; set; }
     public DbSet<Props> Props { get; set; }
     public DbSet<RentAgreement> RentAgreements { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlServer("Server=127.0.0.1;Initial Catalog=WebBlog;User ID=SA;Password=MyVeryStrongPassword123!;Trusted_Connection=False;MultipleActiveResultSets=true");

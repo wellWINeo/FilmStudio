@@ -9,12 +9,12 @@ public class CastingListViewModel : ViewModelBase
 {
     private ApplicationContext db;
 
-    public ObservableCollection<CastingList> castingLists { get; set; }
+    public ObservableCollection<CastingList> CastingLists { get; set; }
 
     public CastingListViewModel(ApplicationContext _db)
     {
         db = _db;
-        castingLists = new ObservableCollection<CastingList>()
+        CastingLists = new ObservableCollection<CastingList>()
         {
             new CastingList{},
             new CastingList{},
