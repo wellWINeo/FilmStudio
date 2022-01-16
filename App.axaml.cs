@@ -23,9 +23,7 @@ public class App : Application
             desktop.MainWindow = new MainWindow
             {
 
-                DataContext = new MainWindowViewModel(new EmployeeViewModel(db),
-                                                    new CastingListViewModel(db),
-                                                    new LoginViewModel(db)),
+                DataContext = new MainWindowViewModel(),
             };
         }
 

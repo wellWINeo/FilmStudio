@@ -4,8 +4,11 @@
 
 # Tracker
 
+## Ideas to fix reactive bindings with TabControl 
+-- [ ] Change TabControl to RoutedViewHost
+-- [ ] Use visibility, ya, again this dirty hack:(
+
 ## Improves
-- [ ] Change UserControl to Page
 - [ ] Make View/ViewModel more separated
 
 ## Bugs

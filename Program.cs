@@ -2,6 +2,10 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.ReactiveUI;
+using FilmStudio.ViewModels;
+using FilmStudio.Views;
+using ReactiveUI;
+using Splat;
 
 namespace FilmStudio;
 
@@ -16,8 +20,17 @@ class Program
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
-            .UsePlatformDetect()
-            .LogToTrace()
-            .UseReactiveUI();
+    {
+        Locator.CurrentMutable.Register(() => new EmployeeView(),
+            typeof(IViewFor<EmployeeViewModel>));
+        Locator.CurrentMutable.Register(() => new CastingListView(),
+            typeof(IViewFor<CastingListViewModel>));
+        Locator.CurrentMutable.Register(() => new CircleView(),
+            typeof(IViewFor<ViewModelBase>));
+
+        return AppBuilder.Configure<App>()
+                .UsePlatformDetect()
+                .LogToTrace()
+                .UseReactiveUI();
+    }
 }

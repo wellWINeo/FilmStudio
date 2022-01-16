@@ -16,11 +16,8 @@ using DynamicData.Binding;
 
 namespace FilmStudio.ViewModels;
 
-// FIXME: grid after row adds updates only after scroll
 public class EmployeeViewModel : ViewModelBase
 {
-    private ApplicationContext db;
-
     // Commands
     public ReactiveCommand<Unit, Unit> AddUserCommand { get; }
     public ReactiveCommand<Unit, Unit> UpdateUserCommand { get; }
@@ -40,9 +37,9 @@ public class EmployeeViewModel : ViewModelBase
     [Reactive] public string SNILS { get; set; } = string.Empty;
     [Reactive] public string INN { get; set; } = string.Empty;
 
-    public EmployeeViewModel(ApplicationContext _db)
+    public EmployeeViewModel(ApplicationContext _db, IScreen screen) :
+        base(_db, screen)
     {
-        db = _db;
         Employees = new(db.Employees);
         // Employees = new ObservableCollection<Employee>()
         // {
@@ -127,8 +124,6 @@ public class EmployeeViewModel : ViewModelBase
 
     private void _updateUserCommand()
     {
-        // TODO: validation
-
         Employees[EmployeeSelectedIndex].Name = Name;
         Employees[EmployeeSelectedIndex].Surname = Surname;
         Employees[EmployeeSelectedIndex].Patronymic = Patronymic;

@@ -6,31 +6,25 @@
 
   <StackPanel Orientation="Vertical">
     <local:LoginView x:Name="LocalLoginView" DataContext="{Binding loginViewModel}" />
-    <TabControl x:Name="MainTabControl" IsVisible="True">
-      <TabItem Header="Employees" VerticalContentAlignment="Center">
-        <local:EmployeeView DataContext="{Binding employeeViewModel}" />
-      </TabItem>
-      <TabItem Header="Casting list" VerticalContentAlignment="Center">
-        <local:CastingListView DataContext="{Binding castingListViewModel}" />
-      </TabItem>
-      <TabItem Header="Film sets" VerticalContentAlignment="Center">
-        <local:CircleView />
-      </TabItem>
-      <TabItem Header="Footages" VerticalContentAlignment="Center">
-        <local:CircleView />
-      </TabItem>
-      <TabItem Header="Accounting" VerticalContentAlignment="Center">
-        <local:CircleView />
-      </TabItem>
-      <TabItem Header="Movies" VerticalContentAlignment="Center">
-        <local:CircleView />
-      </TabItem>
-      <TabItem Header="Cinemas" VerticalContentAlignment="Center">
-        <local:CircleView />
-      </TabItem>
-      <TabItem Header="Ad" VerticalContentAlignment="Center">
-        <local:CircleView />
-      </TabItem>
-    </TabControl>
+    <StackPanel x:Name="MainPanel">
+      <StackPanel Orientation="Horizontal">
+        <TextBlock Margin="5,0">Subsystem:</TextBlock>
+        <ComboBox x:Name="SubsystemList" SelectedIndex="0">
+          <ComboBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Button x:Name="GoSubsystemButton">Go!</Button>
+      </StackPanel>
+      <rxui:RoutedViewHost x:Name="ViewHost" Router="{Binding Router}">
+        <rxui:RoutedViewHost.DefaultContent>
+          <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+              Default content
+          </TextBlock>
+        </rxui:RoutedViewHost.DefaultContent>
+      </rxui:RoutedViewHost>
+    </StackPanel>
   </StackPanel>
 </Window>

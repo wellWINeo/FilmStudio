@@ -7,11 +7,10 @@ namespace FilmStudio.ViewModels;
 
 public class CastingListViewModel : ViewModelBase
 {
-    private ApplicationContext db;
-
     public ObservableCollection<CastingList> CastingLists { get; set; }
 
-    public CastingListViewModel(ApplicationContext _db)
+    public CastingListViewModel(ApplicationContext _db, IScreen screen) :
+        base(_db, screen)
     {
         db = _db;
         CastingLists = new ObservableCollection<CastingList>()

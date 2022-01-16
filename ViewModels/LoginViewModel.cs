@@ -8,17 +8,15 @@ namespace FilmStudio.ViewModels;
 
 public class LoginViewModel : ViewModelBase
 {
-    private ApplicationContext db;
-
     public ReactiveCommand<Unit, Unit> Login { get; }
 
     [Reactive] public string UserName { get; set; } = string.Empty;
     [Reactive] public string Password { get; set; } = string.Empty;
     [Reactive] public bool IsNotAuthed { get; set; } = true;
 
-    public LoginViewModel(ApplicationContext _db)
+    public LoginViewModel(ApplicationContext _db, IScreen screen) :
+        base(_db, screen)
     {
-        db = _db;
         Login = ReactiveCommand.Create(_login);
     }
 
