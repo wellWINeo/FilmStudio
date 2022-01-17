@@ -1,23 +1,88 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reactive;
 using FilmStudio.Models;
+using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using ReactiveUI.Validation.Extensions;
 
 namespace FilmStudio.ViewModels;
 
 public class CastingListViewModel : ViewModelBase
 {
     public ObservableCollection<CastingList> CastingLists { get; set; }
+    public ObservableCollection<Movie> Movies { get; set; }
+    public ObservableCollection<CastingActor> CastingActors { get; set; }
+
+    [Reactive] public string Role { get; set; }
+    [Reactive] public DateTimeOffset? AtDateTime { get; set; }
+
+    [Reactive] public int SelectedMovieIdx { get; set; }
+    [Reactive] public int SelectedActorIdx { get; set; }
+    [Reactive] public int SelectedIdx { get; set; }
+
+    public ReactiveCommand<Unit, Unit> AddToCastingList { get; }
+    public ReactiveCommand<Unit, Unit> UpdateInCastingList { get; }
+    public ReactiveCommand<Unit, Unit> RemoveFromCastingList { get; }
+
+    private Movie SelectedMovie => Movies[SelectedMovieIdx];
+    private CastingActor SelectedCastingActor => CastingActors[SelectedActorIdx];
+    private CastingList SelectedCastingList => CastingLists[SelectedIdx];
 
     public CastingListViewModel(ApplicationContext _db, IScreen screen) :
         base(_db, screen)
     {
-        db = _db;
-        CastingLists = new ObservableCollection<CastingList>()
-        {
-            new CastingList{},
-            new CastingList{},
-            new CastingList{}
-        };
+
+        CastingLists = new(
+            db.CastingLists
+            .Include(e => e.Movie)
+            .Include(e => e.CastingActor)
+            .ToList()
+        );
+        Movies = new(db.Movies);
+        CastingActors = new(db.CastingActors);
+
+        AddToCastingList = ReactiveCommand.Create(_addToCastingList, this.IsValid());
+        UpdateInCastingList = ReactiveCommand.Create(_updateInCastingList, this.IsValid());
+        RemoveFromCastingList = ReactiveCommand.Create(_removeFromCastingList);
+
     }
+
+    private async void _addToCastingList()
+    {
+        var casting = new CastingList()
+        {
+            Role = Role,
+            Datetime = _getDateTimeFromOffset(AtDateTime),
+            Movie = SelectedMovie,
+            CastingActor = SelectedCastingActor
+        };
+
+        await db.CastingLists.AddAsync(casting);
+        await db.SaveChangesAsync();
+        CastingLists.Add(casting);
+    }
+
+    private async void _removeFromCastingList()
+    {
+        db.CastingLists.Remove(SelectedCastingList);
+        await db.SaveChangesAsync();
+        CastingLists.RemoveAt(SelectedIdx);
+    }
+
+    private async void _updateInCastingList()
+    {
+        SelectedCastingList.Role = Role;
+        SelectedCastingList.Datetime = _getDateTimeFromOffset(AtDateTime);
+        SelectedCastingList.Movie = SelectedMovie;
+        SelectedCastingList.CastingActor = SelectedCastingActor;
+
+        db.CastingLists.Update(SelectedCastingList);
+        await db.SaveChangesAsync();
+    }
+
+    private DateTime _getDateTimeFromOffset(DateTimeOffset? offset)
+        => ((DateTimeOffset)offset!).DateTime;
 }

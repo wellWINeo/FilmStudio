@@ -1,20 +1,89 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="using:FilmStudio.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="FilmStudio.Views.CastingListView">
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:vm="using:FilmStudio.ViewModels" mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" x:Class="FilmStudio.Views.CastingListView">
   <Design.DataContext>
     <vm:CastingListViewModel />
   </Design.DataContext>
-          
+
   <StackPanel>
-    <TextBlock>Employees:</TextBlock>
-    <Grid>
-      <DataGrid x:Name="CastingListGrid" 
-                AutoGenerateColumns="True" >
-      </DataGrid>
-    </Grid>
+    <!-- grid with data from db -->
+    <DataGrid x:Name="CastingListGrid" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="OnGridSelectionChanged">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="ID" Binding="{Binding CastingListId}" />
+        <DataGridTextColumn Header="Role" Binding="{Binding Role}" />
+        <DataGridTextColumn Header="At" Binding="{Binding Datetime}" />
+        <DataGridTextColumn Header="Movie" Binding="{Binding Movie}" />
+        <DataGridTextColumn Header="Actor" Binding="{Binding CastingActor}" />
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <!-- button to show/hide form & delete button -->
+    <StackPanel Orientation="Horizontal">
+      <Button x:Name="ShowHideFormButton" Click="OnShowHideFormButtonClick">Show</Button>
+      <Button x:Name="DeleteButton" Margin="5,0">Delete selected row</Button>
+    </StackPanel>
+
+    <!-- from to add/update -->
+    <StackPanel x:Name="AddForm" Margin="0,15">
+      <TextBlock FontWeight="Bold" FontSize="23">Casting actor form:</TextBlock>
+      <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+        <!-- Row #1, for Role -->
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,10,10,10">
+          Role:
+        </TextBlock>
+        <StackPanel Grid.Row="0" Grid.Column="1">
+          <TextBox x:Name="RoleBox" Margin="10,10,10,10" />
+          <TextBlock x:Name="RoleBoxValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+        <!-- Row #2, for DateTime -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="10,10,10,10">
+          At:
+        </TextBlock>
+        <StackPanel Grid.Row="1" Grid.Column="1">
+          <DatePicker x:Name="DatePicker" Margin="10,10,10,10" />
+          <TextBlock x:Name="DateTimePickerValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+        <!-- Row #3, for Movie -->
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="10,10,10,10">
+          Movie:
+        </TextBlock>
+        <StackPanel Grid.Row="2" Grid.Column="1">
+          <ComboBox x:Name="MovieComboBox" Margin="10,10,10,10">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Title}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+          <TextBlock x:Name="MovieComboBoxValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+        <!-- Row #4, for Actor -->
+        <TextBlock Grid.Row="3" Grid.Column="0" Margin="10,10,10,10">
+          Movie:
+        </TextBlock>
+        <StackPanel Grid.Row="3" Grid.Column="1">
+          <ComboBox x:Name="CastingActorComboBox" Margin="10,10,10,10">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <StackPanel Orientation="Horizontal">
+                  <TextBlock Text="{Binding Name}" />
+                  <TextBlock Text=" " />
+                  <TextBlock Text="{Binding Surname}" />
+                  <TextBlock Text=" " />
+                  <TextBlock Text="{Binding Patronymic}" />
+                </StackPanel>
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+          <TextBlock x:Name="CastingActorComboBoxValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+      </Grid>
+      <StackPanel Orientation="Horizontal">
+        <Button x:Name="AddButton">Add</Button>
+        <Button x:Name="UpdateButton" Margin="5,0">Update</Button>
+      </StackPanel>
+    </StackPanel>
   </StackPanel>
 </UserControl>
