@@ -27,8 +27,8 @@ public class RentAgreementViewModel : ViewModelBase
     private Movie SelectedMovie => Movies[SelectedMovieIdx];
 
     // entity attributes
-    [Reactive] public DateTimeOffset RentStartDate { get; set; }
-    [Reactive] public DateTimeOffset RentEndDate { get; set; }
+    [Reactive] public DateTimeOffset? RentStartDate { get; set; } = DateTimeOffset.Now;
+    [Reactive] public DateTimeOffset? RentEndDate { get; set; } = DateTimeOffset.Now;
     [Reactive] public decimal Amount { get; set; }
     [Reactive] public Cinema Cinema { get; set; }
     [Reactive] public Movie Movie { get; set; }
@@ -78,16 +78,16 @@ public class RentAgreementViewModel : ViewModelBase
         );
 
         AddRentAgreement = ReactiveCommand.Create(_addRentAgreement, this.IsValid());
-        RemoveRentAgreement = ReactiveCommand.Create(_updateRentAgreement, this.IsValid());
-        UpdateRentAgreement = ReactiveCommand.Create(_removeRentAgreement);
+        UpdateRentAgreement = ReactiveCommand.Create(_updateRentAgreement, this.IsValid());
+        RemoveRentAgreement = ReactiveCommand.Create(_removeRentAgreement);
     }
 
     private async void _addRentAgreement()
     {
         var rentAgreement = new RentAgreement()
         {
-            RentStartDate = RentStartDate.DateTime,
-            RentEndDate = RentEndDate.DateTime,
+            RentStartDate = _getDateTimeFromOffset(RentStartDate),
+            RentEndDate = _getDateTimeFromOffset(RentEndDate),
             Amount = Amount,
             Cinema = SelectedCinema,
             Movie = SelectedMovie
@@ -107,8 +107,8 @@ public class RentAgreementViewModel : ViewModelBase
 
     private async void _updateRentAgreement()
     {
-        RentAgreements[SelectedIdx].RentStartDate = RentStartDate.DateTime;
-        RentAgreements[SelectedIdx].RentEndDate = RentEndDate.DateTime;
+        RentAgreements[SelectedIdx].RentStartDate = _getDateTimeFromOffset(RentStartDate);
+        RentAgreements[SelectedIdx].RentEndDate = _getDateTimeFromOffset(RentEndDate);
         RentAgreements[SelectedIdx].Amount = Amount;
         RentAgreements[SelectedIdx].Cinema = SelectedCinema;
         RentAgreements[SelectedIdx].Movie = SelectedMovie;
@@ -116,4 +116,7 @@ public class RentAgreementViewModel : ViewModelBase
         db.RentAgreements.Update(RentAgreements[SelectedIdx]);
         await db.SaveChangesAsync();
     }
+
+    private DateTime _getDateTimeFromOffset(DateTimeOffset? value)
+        => ((DateTimeOffset)value!).DateTime;
 }

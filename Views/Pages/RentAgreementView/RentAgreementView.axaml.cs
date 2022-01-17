@@ -10,6 +10,7 @@ using ReactiveUI;
 using System.Collections.ObjectModel;
 using FilmStudio.Models;
 using ReactiveUI.Validation.Extensions;
+using System.Linq;
 
 namespace FilmStudio.Views;
 
@@ -59,6 +60,8 @@ public partial class RentAgreementView : ReactiveUserControl<RentAgreementViewMo
                 view => view.CinemasComboBox.SelectedIndex).DisposeWith(disposables);
             this.Bind(ViewModel, vm => vm.SelectedMovieIdx,
                 view => view.MoviesComboBox.SelectedIndex).DisposeWith(disposables);
+            this.Bind(ViewModel, vm => vm.SelectedIdx, view => view.RentAgreementsGrid.SelectedIndex)
+                .DisposeWith(disposables);
 
             // bind validation
             this.BindValidation(ViewModel, vm => vm.RentStartDate,
@@ -92,14 +95,16 @@ public partial class RentAgreementView : ReactiveUserControl<RentAgreementViewMo
 
     private void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        // ViewModel!.Source = ViewModel.Ads[AdsGrid.SelectedIndex].Source;
-        // ViewModel.Amount = ViewModel.Ads[AdsGrid.SelectedIndex].Amount;
-        // ViewModel.TargetAudience = ViewModel.Ads[AdsGrid.SelectedIndex].TargetAudience;
-        // ViewModel.SelectedMovieIdx = ViewModel.Movies.IndexOf(
-        //     ViewModel.Movies.ElementAt(ViewModel.SelectedMovieIdx)
-        // );
-        // ViewModel.SelectedAdTypeIdx = ViewModel.AdTypes.IndexOf(
-        //     ViewModel.AdTypes.ElementAt(ViewModel.SelectedAdTypeIdx)
-        // );
+        ViewModel.RentStartDate = ViewModel.RentAgreements[ViewModel.SelectedIdx]
+            .RentStartDate;
+        ViewModel.RentEndDate = ViewModel.RentAgreements[ViewModel.SelectedIdx]
+            .RentEndDate;
+        ViewModel.Amount = ViewModel.RentAgreements[ViewModel.SelectedIdx].Amount;
+        ViewModel.SelectedCinemaIdx = ViewModel.Cinemas.IndexOf(
+            ViewModel.Cinemas.ElementAt(ViewModel.SelectedCinemaIdx)
+        );
+        ViewModel.SelectedMovieIdx = ViewModel.Movies.IndexOf(
+            ViewModel.Movies.ElementAt(ViewModel.SelectedMovieIdx)
+        );
     }
 }
