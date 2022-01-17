@@ -3,17 +3,16 @@
 # Description
 
 # Tracker
-
-## Goals
+                                    
+## Goals                                       f,j,f
 - [x] AdType
 - [ ] Ad
 - [x] Cinemas
 - [ ] RentAgreement
 - [ ] CastingActor
-- [ ] CastinList
-- [ ] FootageStatus
+- [ ] CastingList
 - [ ] Footage
-- [ ] Movie
+- [x] Movie
 - [ ] Props
 - [ ] Positions
 - [ ] FilmSet

@@ -1,0 +1,72 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" x:Class="FilmStudio.Views.MovieView">
+  <StackPanel>
+    <!-- grid with data from db -->
+    <DataGrid x:Name="MoviesGrid" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="OnGridSelectionChanged">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="ID" Binding="{Binding MovieId}" />
+        <DataGridTextColumn Header="Title" Binding="{Binding Title}" />
+        <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
+        <DataGridTextColumn Header="Release year" Binding="{Binding ReleaseYear}" />
+        <DataGridTextColumn Header="Status" Binding="{Binding Status}" />
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <!-- button to show/hide form & delete button -->
+    <StackPanel Orientation="Horizontal">
+      <Button x:Name="ShowHideFormButton" Click="OnShowHideFormButtonClick">Show</Button>
+      <Button x:Name="DeleteButton" Margin="5,0">Delete selected row</Button>
+    </StackPanel>
+
+    <!-- from to add/update cinema -->
+    <StackPanel x:Name="AddMovieForm" Margin="0,15">
+      <TextBlock FontWeight="Bold" FontSize="23">Movie form:</TextBlock>
+      <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+        <!-- Row #1, for title -->
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,10,10,10">
+                Title:
+      			</TextBlock>
+        <StackPanel Grid.Row="0" Grid.Column="1">
+          <TextBox x:Name="MovieTitleBox" Margin="10,10,10,10" />
+          <TextBlock x:Name="MovieTitleBoxValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+        <!-- Row #2, for Description -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="10,10,10,10">
+          Description:
+      	</TextBlock>
+        <StackPanel Grid.Row="1" Grid.Column="1">
+          <TextBox x:Name="MovieDescriptionBox" Margin="10,10,10,10" />
+          <TextBlock x:Name="MovieDescriptionBoxValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+        <!-- Row #3, for ReleaseYear -->
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="10,10,10,10">
+          Release year:
+        </TextBlock>
+        <StackPanel Grid.Row="2" Grid.Column="1">
+          <NumericUpDown x:Name="MovieReleaseYear" Margin="10,10,10,10" />
+          <TextBlock x:Name="MovieReleaseYearValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+        <!-- Row #4, for Status -->
+        <TextBlock Grid.Row="3" Grid.Column="0" Margin="10,10,10,10">
+          Status:
+        </TextBlock>
+        <StackPanel Grid.Row="3" Grid.Column="1">
+          <ComboBox x:Name="MovieStatus" Margin="10,10,10,10">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+          <TextBlock x:Name="MovieStatusBoxValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+      </Grid>
+      <StackPanel Orientation="Horizontal">
+        <Button x:Name="AddMovieButton">Add</Button>
+        <Button x:Name="UpdateMovieButton" Margin="5,0">Update</Button>
+      </StackPanel>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

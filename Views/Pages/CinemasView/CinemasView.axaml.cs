@@ -26,6 +26,7 @@ public partial class CinemasView : ReactiveUserControl<CinemasViewModel>
             this.AddCinemaForm.IsVisible = _isCinemaFormShow;
         }
     }
+
     public CinemasView()
     {
         AvaloniaXamlLoader.Load(this);

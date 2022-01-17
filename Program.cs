@@ -37,6 +37,9 @@ class Program
         Locator.CurrentMutable.Register(() => new CinemasView(),
             typeof(IViewFor<CinemasViewModel>));
 
+        Locator.CurrentMutable.Register(() => new MovieView(),
+            typeof(IViewFor<MovieViewModel>));
+
         // build app
         return AppBuilder.Configure<App>()
                 .UsePlatformDetect()
