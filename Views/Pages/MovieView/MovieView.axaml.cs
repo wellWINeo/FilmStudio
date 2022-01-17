@@ -83,6 +83,5 @@ public partial class MovieView : ReactiveUserControl<MovieViewModel>
         ViewModel.Title = ViewModel.Movies[MoviesGrid.SelectedIndex].Title;
         ViewModel.Description = ViewModel.Movies[MoviesGrid.SelectedIndex].Description;
         ViewModel.ReleaseYear = ViewModel.Movies[MoviesGrid.SelectedIndex].ReleaseYear;
-        // ViewModel.Status = ViewModel.Movies[MoviesGrid.SelectedIndex].Status;
     }
 }

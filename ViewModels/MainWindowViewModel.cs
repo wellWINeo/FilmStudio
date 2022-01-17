@@ -56,7 +56,7 @@ public class MainWindowViewModel : ReactiveObject, IScreen
                 new CinemasViewModel(db, this)),
 
             Subsystem.Ad => Router.Navigate.Execute(
-                new ViewModelBase(db, this)),
+                new AdViewModel(db, this)),
 
             Subsystem.AdType => Router.Navigate.Execute(
                 new AdTypeViewModel(db, this))

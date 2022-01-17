@@ -40,6 +40,9 @@ class Program
         Locator.CurrentMutable.Register(() => new MovieView(),
             typeof(IViewFor<MovieViewModel>));
 
+        Locator.CurrentMutable.Register(() => new AdView(),
+            typeof(IViewFor<AdViewModel>));
+
         // build app
         return AppBuilder.Configure<App>()
                 .UsePlatformDetect()

@@ -5,27 +5,23 @@
 # Tracker
                                     
 ## Goals                                       f,j,f
-- [x] AdType
+- [v] AdType
 - [ ] Ad
-- [x] Cinemas
+- [v] Cinemas
 - [ ] RentAgreement
 - [ ] CastingActor
 - [ ] CastingList
 - [ ] Footage
-- [x] Movie
+- [v] Movie
 - [ ] Props
 - [ ] Positions
 - [ ] FilmSet
-- [x] Employee
-
-
-## Ideas to fix reactive bindings with TabControl 
-- [ ] Change TabControl to RoutedViewHost
-- [ ] Use visibility, ya, again this dirty hack:(
+- [v] Employee
 
 ## Improves
+- [ ] Ad interaction logic for One2Many relations (Probably ListBox)
 
 ## Bugs
-- [x] DataGrid not updates after item's property change
-- [x] DataGrid add/remove row apperas after scroll (sometimes)
+- [v] DataGrid not updates after item's property change
+- [v] DataGrid add/remove row apperas after scroll (sometimes)
 - [ ] Reactive bindings doesnt work after changing tab
