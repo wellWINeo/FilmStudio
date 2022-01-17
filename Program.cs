@@ -46,6 +46,9 @@ class Program
         Locator.CurrentMutable.Register(() => new RentAgreementView(),
             typeof(IViewFor<RentAgreementViewModel>));
 
+        Locator.CurrentMutable.Register(() => new CastingActorView(),
+            typeof(IViewFor<CastingActorViewModel>));
+
         // build app
         return AppBuilder.Configure<App>()
                 .UsePlatformDetect()

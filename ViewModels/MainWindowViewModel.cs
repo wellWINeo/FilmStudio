@@ -72,6 +72,10 @@ public class MainWindowViewModel : ReactiveObject, IScreen
 
             Subsystem.RentAgreement => Router.Navigate.Execute(
                 new RentAgreementViewModel(db, this)
+            ),
+
+            Subsystem.CastingActor => Router.Navigate.Execute(
+                new CastingActorViewModel(db, this)
             )
         };
 }

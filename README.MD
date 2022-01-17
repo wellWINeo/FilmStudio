@@ -9,7 +9,7 @@
 - [v] Ad
 - [v] Cinemas
 - [V] RentAgreement
-- [ ] CastingActor
+- [v] CastingActor
 - [ ] CastingList
 - [ ] Footage
 - [v] Movie
