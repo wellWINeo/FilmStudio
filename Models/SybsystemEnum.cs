@@ -9,5 +9,6 @@ public enum Subsystem
     Accounting,
     Movies,
     Cinemas,
-    Ad
+    Ad,
+    AdType
 }

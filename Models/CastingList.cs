@@ -1,9 +1,10 @@
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace FilmStudio.Models;
 
-public class CastingList
+public class CastingList : INotifyPropertyChanged
 {
     [Key]
     public int CastingListId { get; set; }
@@ -12,4 +13,6 @@ public class CastingList
     public DateTime Datetime { get; set; }
     public int IdMovie { get; set; }
     public int IdCastingActor { get; set; }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 }

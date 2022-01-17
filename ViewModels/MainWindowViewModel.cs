@@ -32,9 +32,7 @@ public class MainWindowViewModel : ReactiveObject, IScreen
 
 
     private IObservable<IRoutableViewModel> _changeView()
-    {
-        // subsystem++;
-        return ListOfSubsystems.GetValue(CurrentIndex) switch
+        => ListOfSubsystems.GetValue(CurrentIndex) switch
         {
             Subsystem.Employees => Router.Navigate.Execute(
                 new EmployeeViewModel(db, this)),
@@ -58,7 +56,9 @@ public class MainWindowViewModel : ReactiveObject, IScreen
                 new ViewModelBase(db, this)),
 
             Subsystem.Ad => Router.Navigate.Execute(
-                new ViewModelBase(db, this))
+                new ViewModelBase(db, this)),
+
+            Subsystem.AdType => Router.Navigate.Execute(
+                new AdTypeViewModel(db, this))
         };
-    }
 }

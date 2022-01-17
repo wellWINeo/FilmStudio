@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" x:Class="FilmStudio.Views.AdTypeView">
+  <StackPanel>
+    <!-- grid with data from db -->
+    <DataGrid x:Name="AdTypeGrid" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="OnGridSelectionChanged">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="ID" Binding="{Binding AdTypeId}" />
+        <DataGridTextColumn Header="Title" Binding="{Binding Name}" />
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <!-- delete row button -->
+    <Button x:Name="DeleteButton" Margin="5,5">Delete selected row</Button>
+
+    <!-- from to add new AdType -->
+    <StackPanel x:Name="AddAdType" Margin="0,15" Orientation="Horizontal">
+      <TextBlock FontWeight="Bold" FontSize="23" VerticalAlignment="Center">
+        Type of Ad
+      </TextBlock>
+      <StackPanel VerticalAlignment="Center">
+        <TextBox x:Name="AdTypeNameBox" Margin="10,10,10,10" />
+        <TextBlock x:Name="AdTypeNameBoxValidation" Foreground="red" FontSize="12" />
+      </StackPanel>
+    </StackPanel>
+    <StackPanel Orientation="Horizontal">
+      <Button x:Name="AddAdTypeButton">Add</Button>
+      <Button x:Name="UpdateAdTypeButton" Margin="5,0">Update</Button>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

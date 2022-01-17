@@ -21,13 +21,20 @@ class Program
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
     {
+        // locator registration
         Locator.CurrentMutable.Register(() => new EmployeeView(),
             typeof(IViewFor<EmployeeViewModel>));
+
         Locator.CurrentMutable.Register(() => new CastingListView(),
             typeof(IViewFor<CastingListViewModel>));
+
         Locator.CurrentMutable.Register(() => new CircleView(),
             typeof(IViewFor<ViewModelBase>));
 
+        Locator.CurrentMutable.Register(() => new AdTypeView(),
+            typeof(IViewFor<AdTypeViewModel>));
+
+        // build app
         return AppBuilder.Configure<App>()
                 .UsePlatformDetect()
                 .LogToTrace()

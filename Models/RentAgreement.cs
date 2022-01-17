@@ -1,10 +1,11 @@
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FilmStudio.Models;
 
-public class RentAgreement
+public class RentAgreement : INotifyPropertyChanged
 {
     [Key]
     public int RentAgreementId { get; set; }
@@ -15,4 +16,6 @@ public class RentAgreement
     public decimal Amount { get; set; }
     public virtual Cinema Cinema { get; set; }
     public virtual Movie Movie { get; set; }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 }

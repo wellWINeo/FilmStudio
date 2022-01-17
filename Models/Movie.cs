@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FilmStudio.Models;
 
-public class Movie
+public class Movie : INotifyPropertyChanged
 {
     [Key]
     public int MovieId { get; set; }
@@ -13,6 +14,8 @@ public class Movie
     public int ReleaseYear { get; set; }
     public MovieStatus Status { get; set; }
     public virtual ICollection<Employee> Employees { get; set; }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 }
 
 public enum MovieStatus
