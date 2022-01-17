@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" x:Class="FilmStudio.Views.CinemasView">
+  <StackPanel>
+    <!-- grid with data from db -->
+    <DataGrid x:Name="CinemasGrid" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="OnGridSelectionChanged">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="ID" Binding="{Binding CinemaId}" />
+        <DataGridTextColumn Header="Title" Binding="{Binding Title}" />
+        <DataGridTextColumn Header="Address" Binding="{Binding Address}" />
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <!-- button to show/hide form & delete button -->
+    <StackPanel Orientation="Horizontal">
+      <Button x:Name="ShowHideFormButton" Click="OnShowHideFormButtonClick">Show</Button>
+      <Button x:Name="DeleteButton" Margin="5,0">Delete selected row</Button>
+    </StackPanel>
+
+    <!-- from to add/update cinema -->
+    <StackPanel x:Name="AddCinemaForm" Margin="0,15">
+      <TextBlock FontWeight="Bold" FontSize="23">Cinema form:</TextBlock>
+      <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto">
+        <!-- Row #1, for title -->
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,10,10,10">
+                Title:
+      			</TextBlock>
+        <StackPanel Grid.Row="0" Grid.Column="1">
+          <TextBox x:Name="CinemaTitleBox" Margin="10,10,10,10" />
+          <TextBlock x:Name="CinemaTitleBoxValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+        <!-- Row #2, for Address -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="10,10,10,10">
+                 Address:
+      			</TextBlock>
+        <StackPanel Grid.Row="1" Grid.Column="1">
+          <TextBox x:Name="CinemaAddressBox" Margin="10,10,10,10" />
+          <TextBlock x:Name="CinemaAddressBoxValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+      </Grid>
+      <StackPanel Orientation="Horizontal">
+        <Button x:Name="AddCinemaButton">Add</Button>
+        <Button x:Name="UpdateCinemaButton" Margin="5,0">Update</Button>
+      </StackPanel>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

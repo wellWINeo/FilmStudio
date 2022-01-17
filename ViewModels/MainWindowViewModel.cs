@@ -53,7 +53,7 @@ public class MainWindowViewModel : ReactiveObject, IScreen
                 new ViewModelBase(db, this)),
 
             Subsystem.Cinemas => Router.Navigate.Execute(
-                new ViewModelBase(db, this)),
+                new CinemasViewModel(db, this)),
 
             Subsystem.Ad => Router.Navigate.Execute(
                 new ViewModelBase(db, this)),

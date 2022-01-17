@@ -7,7 +7,7 @@
 ## Goals
 - [x] AdType
 - [ ] Ad
-- [ ] Cinemas
+- [x] Cinemas
 - [ ] RentAgreement
 - [ ] CastingActor
 - [ ] CastinList
