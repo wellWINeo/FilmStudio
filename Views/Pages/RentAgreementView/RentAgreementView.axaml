@@ -1,0 +1,88 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" x:Class="FilmStudio.Views.RentAgreementView">
+  <StackPanel>
+    <!-- grid with data from db -->
+    <DataGrid x:Name="RentAgreementsGrid" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="OnGridSelectionChanged">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="ID" Binding="{Binding RentAgreementId}" />
+        <DataGridTextColumn Header="Start Date" Binding="{Binding RentStartDate}" />
+        <DataGridTextColumn Header="End Date" Binding="{Binding RentEndDate}" />
+        <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" />
+        <DataGridTextColumn Header="Cinema" Binding="{Binding Cinema}" />
+        <DataGridTextColumn Header="Movie" Binding="{Binding Movie}" />
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <!-- button to show/hide form & delete button -->
+    <StackPanel Orientation="Horizontal">
+      <Button x:Name="ShowHideFormButton" Click="OnShowHideFormButtonClick">Show</Button>
+      <Button x:Name="DeleteButton" Margin="5,0">Delete selected row</Button>
+    </StackPanel>
+
+    <!-- from to add/update -->
+    <StackPanel x:Name="AddForm" Margin="0,15">
+      <TextBlock FontWeight="Bold" FontSize="23">Rent agreement form:</TextBlock>
+      <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+        <!-- Row #1, for RentStartDate -->
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,10,10,10">
+          Start date:
+        </TextBlock>
+        <StackPanel Grid.Row="0" Grid.Column="1">
+          <DatePicker x:Name="RentStartDate" Margin="10,10,10,10" />
+          <TextBlock x:Name="RentStartDateValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+        <!-- Row #2, for RentEndDate -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="10,10,10,10">
+          Amount:
+        </TextBlock>
+        <StackPanel Grid.Row="1" Grid.Column="1">
+          <DatePicker x:Name="RentEndDate" Margin="10,10,10,10" />
+          <TextBlock x:Name="RentEndDateValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+        <!-- Row #3, for Amount -->
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="10,10,10,10">
+                    Amount:
+                  </TextBlock>
+        <StackPanel Grid.Row="2" Grid.Column="1">
+          <NumericUpDown x:Name="AmountNumeric" Margin="10,10,10,10" />
+          <TextBlock x:Name="AmountNumericValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+        <!-- Row #4, for Movie -->
+        <TextBlock Grid.Row="3" Grid.Column="0" Margin="10,10,10,10">
+                    Movie:
+                  </TextBlock>
+        <StackPanel Grid.Row="3" Grid.Column="1">
+          <ComboBox x:Name="MoviesComboBox" Margin="10,10,10,10">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Title}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+          <TextBlock x:Name="MoviesComboBoxValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+        <!-- Row #5, for Cinema -->
+        <TextBlock Grid.Row="4" Grid.Column="0" Margin="10,10,10,10">
+                    Cinema:
+                  </TextBlock>
+        <StackPanel Grid.Row="4" Grid.Column="1">
+          <ComboBox x:Name="CinemasComboBox" Margin="10,10,10,10">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Title}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+          <TextBlock x:Name="CinemasComboBoxValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+      </Grid>
+      <StackPanel Orientation="Horizontal">
+        <Button x:Name="AddButton">Add</Button>
+        <Button x:Name="UpdateButton" Margin="5,0">Update</Button>
+      </StackPanel>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

@@ -6,6 +6,7 @@ using FilmStudio.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace FilmStudio.ViewModels;
 
@@ -34,7 +35,10 @@ public class AdViewModel : ViewModelBase
 
     public AdViewModel(ApplicationContext _db, IScreen screen) : base(_db, screen)
     {
-        Ads = new(db.Ads);
+        Ads = new(db.Ads
+            .Include(e => e.Movie)
+            .Include(e => e.AdType)
+            .ToList());
         Movies = db.Movies.AsEnumerable();
         AdTypes = db.AdTypes.AsEnumerable();
 
@@ -58,13 +62,13 @@ public class AdViewModel : ViewModelBase
 
         this.ValidationRule(
             vm => vm.SelectedMovieIdx,
-            value => value >= 0,
+            value => value >= 0 && value < Movies.Count(),
             "Choose movie!"
         );
 
         this.ValidationRule(
             vm => vm.SelectedAdTypeIdx,
-            value => value >= 0,
+            value => value >= 0 && value < AdTypes.Count(),
             "Choose ad type!"
         );
 

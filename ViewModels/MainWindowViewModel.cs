@@ -35,30 +35,43 @@ public class MainWindowViewModel : ReactiveObject, IScreen
         => ListOfSubsystems.GetValue(CurrentIndex) switch
         {
             Subsystem.Employees => Router.Navigate.Execute(
-                new EmployeeViewModel(db, this)),
+                new EmployeeViewModel(db, this)
+            ),
 
             Subsystem.CastingList => Router.Navigate.Execute(
-                new CastingListViewModel(db, this)),
+                new CastingListViewModel(db, this)
+            ),
 
             Subsystem.FilmSets => Router.Navigate.Execute(
-                new ViewModelBase(db, this)),
+                new ViewModelBase(db, this)
+            ),
 
             Subsystem.Footages => Router.Navigate.Execute(
-                new ViewModelBase(db, this)),
+                new ViewModelBase(db, this)
+            ),
 
             Subsystem.Accounting => Router.Navigate.Execute(
-                new ViewModelBase(db, this)),
+                new ViewModelBase(db, this)
+            ),
 
             Subsystem.Movies => Router.Navigate.Execute(
-                new MovieViewModel(db, this)),
+                new MovieViewModel(db, this)
+            ),
 
             Subsystem.Cinemas => Router.Navigate.Execute(
-                new CinemasViewModel(db, this)),
+                new CinemasViewModel(db, this)
+            ),
 
             Subsystem.Ad => Router.Navigate.Execute(
-                new AdViewModel(db, this)),
+                new AdViewModel(db, this)
+            ),
 
             Subsystem.AdType => Router.Navigate.Execute(
-                new AdTypeViewModel(db, this))
+                new AdTypeViewModel(db, this)
+            ),
+
+            Subsystem.RentAgreement => Router.Navigate.Execute(
+                new RentAgreementViewModel(db, this)
+            )
         };
 }

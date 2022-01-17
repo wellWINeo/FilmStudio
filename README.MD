@@ -4,9 +4,9 @@
 
 # Tracker
                                     
-## Goals                                       f,j,f
+## Goals
 - [v] AdType
-- [ ] Ad
+- [v] Ad
 - [v] Cinemas
 - [ ] RentAgreement
 - [ ] CastingActor
@@ -25,3 +25,5 @@
 - [v] DataGrid not updates after item's property change
 - [v] DataGrid add/remove row apperas after scroll (sometimes)
 - [ ] Reactive bindings doesnt work after changing tab
+- [ ] Exception if change value multiple times in AdView
+- [ ] Movie and AdType columns not showing in AdView

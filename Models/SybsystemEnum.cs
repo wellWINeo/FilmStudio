@@ -10,5 +10,6 @@ public enum Subsystem
     Movies,
     Cinemas,
     Ad,
-    AdType
+    AdType,
+    RentAgreement
 }
