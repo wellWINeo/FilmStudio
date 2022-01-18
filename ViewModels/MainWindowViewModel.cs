@@ -43,7 +43,7 @@ public class MainWindowViewModel : ReactiveObject, IScreen
             ),
 
             Subsystem.FilmSets => Router.Navigate.Execute(
-                new ViewModelBase(db, this)
+                new FilmSetViewModel(db, this)
             ),
 
             Subsystem.Footages => Router.Navigate.Execute(

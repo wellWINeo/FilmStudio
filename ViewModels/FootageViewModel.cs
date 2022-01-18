@@ -79,7 +79,9 @@ public class FootageViewModel : ViewModelBase
 
         var list = db.Footages.ToList();
 
-
+        var footage = db.Footages.Where(
+            e => e.FootageId == SelectedFootage.FootageId)
+            .FirstOrDefault();
 
         footage.SceneName = SceneName;
         footage.TimeSpan = TimeSpan;
