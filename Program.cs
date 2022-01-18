@@ -49,6 +49,9 @@ class Program
         Locator.CurrentMutable.Register(() => new CastingActorView(),
             typeof(IViewFor<CastingActorViewModel>));
 
+        Locator.CurrentMutable.Register(() => new PositionView(),
+            typeof(IViewFor<PositionViewModel>));
+
         // build app
         return AppBuilder.Configure<App>()
                 .UsePlatformDetect()

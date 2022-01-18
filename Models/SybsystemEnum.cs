@@ -12,5 +12,7 @@ public enum Subsystem
     Ad,
     AdType,
     RentAgreement,
-    CastingActor
+    CastingActor,
+    Position,
+    Users
 }

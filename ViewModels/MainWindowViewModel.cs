@@ -76,6 +76,10 @@ public class MainWindowViewModel : ReactiveObject, IScreen
 
             Subsystem.CastingActor => Router.Navigate.Execute(
                 new CastingActorViewModel(db, this)
-            )
+            ),
+
+            Subsystem.Position => Router.Navigate.Execute(
+                new PositionViewModel(db, this)
+)
         };
 }

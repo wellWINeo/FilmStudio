@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" x:Class="FilmStudio.Views.PositionView">
+  <StackPanel>
+    <!-- grid with data from db -->
+    <DataGrid x:Name="PositionsGrid" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="OnGridSelectionChanged">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="ID" Binding="{Binding PositionId}" />
+        <DataGridTextColumn Header="Title" Binding="{Binding Title}" />
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <!-- delete row button -->
+    <Button x:Name="DeleteButton" Margin="5,5">Delete selected row</Button>
+
+    <!-- from to add new AdType -->
+    <StackPanel x:Name="Form" Margin="0,15" Orientation="Horizontal">
+      <TextBlock FontWeight="Bold" FontSize="23" VerticalAlignment="Center">
+        Position:
+      </TextBlock>
+      <StackPanel VerticalAlignment="Center">
+        <TextBox x:Name="NameBox" Margin="10,10,10,10" />
+        <TextBlock x:Name="NameBoxValidation" Foreground="red" FontSize="12" />
+      </StackPanel>
+    </StackPanel>
+    <StackPanel Orientation="Horizontal">
+      <Button x:Name="AddButton">Add</Button>
+      <Button x:Name="UpdateButton" Margin="5,0">Update</Button>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

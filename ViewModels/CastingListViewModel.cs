@@ -44,6 +44,8 @@ public class CastingListViewModel : ViewModelBase
         Movies = new(db.Movies);
         CastingActors = new(db.CastingActors);
 
+        // TODO: add validation
+
         AddToCastingList = ReactiveCommand.Create(_addToCastingList, this.IsValid());
         UpdateInCastingList = ReactiveCommand.Create(_updateInCastingList, this.IsValid());
         RemoveFromCastingList = ReactiveCommand.Create(_removeFromCastingList);
