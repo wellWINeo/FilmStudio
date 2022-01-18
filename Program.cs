@@ -52,6 +52,10 @@ class Program
         Locator.CurrentMutable.Register(() => new PositionView(),
             typeof(IViewFor<PositionViewModel>));
 
+        Locator.CurrentMutable.Register(() => new UserView(),
+            typeof(IViewFor<UserViewModel>));
+
+
         // build app
         return AppBuilder.Configure<App>()
                 .UsePlatformDetect()

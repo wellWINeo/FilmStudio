@@ -17,9 +17,11 @@
 - [x] Positions
 - [ ] FilmSet
 - [x] Employee
-- [ ] Users
+- [x] Users
 
 ## Improves
+- [ ] Fix bugs
+- [ ] Add validation, where forgot
 - [ ] Add interaction logic for One2Many relations (Probably ListBox)
 
 ## Bugs

@@ -80,6 +80,11 @@ public class MainWindowViewModel : ReactiveObject, IScreen
 
             Subsystem.Position => Router.Navigate.Execute(
                 new PositionViewModel(db, this)
-)
+            ),
+
+
+            Subsystem.Users => Router.Navigate.Execute(
+                new UserViewModel(db, this)
+            )
         };
 }

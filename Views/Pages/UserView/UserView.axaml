@@ -1,0 +1,46 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" x:Class="FilmStudio.Views.UserView">
+  <StackPanel>
+    <!-- grid with data from db -->
+    <DataGrid x:Name="UsersGrid" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="OnGridSelectionChanged">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="ID" Binding="{Binding UserId}" />
+        <DataGridTextColumn Header="UserName" Binding="{Binding UserName}" />
+        <DataGridTextColumn Header="Password" Binding="{Binding Password}" />
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <!-- button to show/hide form & delete button -->
+    <StackPanel Orientation="Horizontal">
+      <Button x:Name="ShowHideFormButton" Click="OnShowHideFormButtonClick">Show</Button>
+      <Button x:Name="DeleteButton" Margin="5,0">Delete selected row</Button>
+    </StackPanel>
+
+    <!-- from to add/update cinema -->
+    <StackPanel x:Name="AddForm" Margin="0,15">
+      <TextBlock FontWeight="Bold" FontSize="23">User form:</TextBlock>
+      <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto">
+        <!-- Row #1, for UserName -->
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,10,10,10">
+                UserName:
+      			</TextBlock>
+        <StackPanel Grid.Row="0" Grid.Column="1">
+          <TextBox x:Name="UserNameBox" Margin="10,10,10,10" />
+          <TextBlock x:Name="UserNameBoxValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+        <!-- Row #2, for Password -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="10,10,10,10">
+                 Password:
+      			</TextBlock>
+        <StackPanel Grid.Row="1" Grid.Column="1">
+          <TextBox x:Name="PasswordBox" Margin="10,10,10,10" />
+          <TextBlock x:Name="PasswordBoxValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+      </Grid>
+      <StackPanel Orientation="Horizontal">
+        <Button x:Name="AddButton">Add</Button>
+        <Button x:Name="UpdateButton" Margin="5,0">Update</Button>
+      </StackPanel>
+    </StackPanel>
+  </StackPanel>
+</UserControl>
