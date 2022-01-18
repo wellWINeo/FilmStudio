@@ -10,8 +10,8 @@
         <DataGridTextColumn Header="ID" Binding="{Binding CastingListId}" />
         <DataGridTextColumn Header="Role" Binding="{Binding Role}" />
         <DataGridTextColumn Header="At" Binding="{Binding Datetime}" />
-        <DataGridTextColumn Header="Movie" Binding="{Binding Movie}" />
-        <DataGridTextColumn Header="Actor" Binding="{Binding CastingActor}" />
+        <DataGridTextColumn Header="Movie" Binding="{Binding Movie.Title}" />
+        <DataGridTextColumn Header="Actor" Binding="{Binding CastingActor.Surname}" />
       </DataGrid.Columns>
     </DataGrid>
 

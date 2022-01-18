@@ -61,6 +61,9 @@ class Program
         Locator.CurrentMutable.Register(() => new FilmSetView(),
             typeof(IViewFor<FilmSetViewModel>));
 
+        Locator.CurrentMutable.Register(() => new PropsView(),
+            typeof(IViewFor<PropsViewModel>));
+
 
         // build app
         return AppBuilder.Configure<App>()

@@ -6,8 +6,8 @@
         <DataGridTextColumn Header="ID" Binding="{Binding AdId}" />
         <DataGridTextColumn Header="Source" Binding="{Binding Source}" />
         <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" />
-        <DataGridTextColumn Header="Movie" Binding="{Binding Movie}" />
-        <DataGridTextColumn Header="Ad type" Binding="{Binding AdType}" />
+        <DataGridTextColumn Header="Movie" Binding="{Binding Movie.Title}" />
+        <DataGridTextColumn Header="Ad type" Binding="{Binding AdType.Name}" />
       </DataGrid.Columns>
     </DataGrid>
 
@@ -19,7 +19,7 @@
 
     <!-- from to add/update cinema -->
     <StackPanel x:Name="AddAdForm" Margin="0,15">
-      <TextBlock FontWeight="Bold" FontSize="23">Movie form:</TextBlock>
+      <TextBlock FontWeight="Bold" FontSize="23">Ad form:</TextBlock>
       <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
         <!-- Row #1, for Source -->
         <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,10,10,10">

@@ -7,8 +7,8 @@
         <DataGridTextColumn Header="Start Date" Binding="{Binding RentStartDate}" />
         <DataGridTextColumn Header="End Date" Binding="{Binding RentEndDate}" />
         <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" />
-        <DataGridTextColumn Header="Cinema" Binding="{Binding Cinema}" />
-        <DataGridTextColumn Header="Movie" Binding="{Binding Movie}" />
+        <DataGridTextColumn Header="Cinema" Binding="{Binding Cinema.Title}" />
+        <DataGridTextColumn Header="Movie" Binding="{Binding Movie.Title}" />
       </DataGrid.Columns>
     </DataGrid>
 

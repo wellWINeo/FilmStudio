@@ -5,7 +5,7 @@
       <DataGrid.Columns>
         <DataGridTextColumn Header="ID" Binding="{Binding FilmSetId}" />
         <DataGridTextColumn Header="Location" Binding="{Binding Location}" />
-        <DataGridTextColumn Header="Movie" Binding="{Binding Movie}" />
+        <DataGridTextColumn Header="Movie" Binding="{Binding Movie.Title}" />
       </DataGrid.Columns>
     </DataGrid>
 

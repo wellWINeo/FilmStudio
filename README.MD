@@ -15,7 +15,7 @@
 - [x] Movie
 - [ ] Props
 - [x] Positions
-- [ ] FilmSet
+- [x] FilmSet
 - [x] Employee
 - [x] Users
 

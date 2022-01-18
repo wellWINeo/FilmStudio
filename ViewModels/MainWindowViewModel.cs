@@ -50,10 +50,6 @@ public class MainWindowViewModel : ReactiveObject, IScreen
                 new FootageViewModel(db, this)
             ),
 
-            Subsystem.Accounting => Router.Navigate.Execute(
-                new ViewModelBase(db, this)
-            ),
-
             Subsystem.Movies => Router.Navigate.Execute(
                 new MovieViewModel(db, this)
             ),
@@ -82,9 +78,12 @@ public class MainWindowViewModel : ReactiveObject, IScreen
                 new PositionViewModel(db, this)
             ),
 
-
             Subsystem.Users => Router.Navigate.Execute(
                 new UserViewModel(db, this)
+            ),
+
+            Subsystem.Props => Router.Navigate.Execute(
+                new PropsViewModel(db, this)
             )
         };
 }

@@ -7,7 +7,7 @@
         <DataGridTextColumn Header="Scene" Binding="{Binding SceneName}" />
         <DataGridTextColumn Header="Timespan" Binding="{Binding TimeSpan}" />
         <DataGridTextColumn Header="Take count" Binding="{Binding TakeCount}" />
-        <DataGridTextColumn Header="Movie" Binding="{Binding Movie}" />
+        <DataGridTextColumn Header="Movie" Binding="{Binding Movie.Title}" />
         <DataGridTextColumn Header="Status" Binding="{Binding Status}" />
       </DataGrid.Columns>
     </DataGrid>
@@ -20,7 +20,7 @@
 
     <!-- from to add/update -->
     <StackPanel x:Name="AddForm" Margin="0,15">
-      <TextBlock FontWeight="Bold" FontSize="23">Casting actor form:</TextBlock>
+      <TextBlock FontWeight="Bold" FontSize="23">Footage form:</TextBlock>
       <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
         <!-- Row #1, for Scene -->
         <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,10,10,10">

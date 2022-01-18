@@ -70,9 +70,12 @@ public class MovieViewModel : ViewModelBase
 
     private async void _removeMovie()
     {
-        db.Movies.Remove(Movies[SelectedMovieIndex]);
-        await db.SaveChangesAsync();
-        Movies.RemoveAt(SelectedMovieIndex);
+        if (0 <= SelectedStatusIndex && SelectedStatusIndex <= Movies.Count())
+        {
+            db.Movies.Remove(Movies[SelectedMovieIndex]);
+            await db.SaveChangesAsync();
+            Movies.RemoveAt(SelectedMovieIndex);
+        }
     }
 
     private async void _updateMovie()

@@ -1,0 +1,75 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450" x:Class="FilmStudio.Views.PropsView">
+  <StackPanel>
+    <!-- grid with data from db -->
+    <DataGrid x:Name="PropsGrid" AutoGenerateColumns="False" IsReadOnly="True" SelectionChanged="OnGridSelectionChanged">
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="ID" Binding="{Binding PropsId}" />
+        <DataGridTextColumn Header="Title" Binding="{Binding Title}" />
+        <DataGridTextColumn Header="Description" Binding="{Binding Description}" />
+        <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" />
+        <DataGridTextColumn Header="Location" Binding="{Binding FilmSet.Location}" />
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <!-- button to show/hide form & delete button -->
+    <StackPanel Orientation="Horizontal">
+      <Button x:Name="ShowHideFormButton" Click="OnShowHideFormButtonClick">Show</Button>
+      <Button x:Name="DeleteButton" Margin="5,0">Delete selected row</Button>
+    </StackPanel>
+
+    <!-- from to add/update -->
+    <StackPanel x:Name="AddForm" Margin="0,15">
+      <TextBlock FontWeight="Bold" FontSize="23">Casting actor form:</TextBlock>
+      <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+        <!-- Row #1, for Title -->
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,10,10,10">
+          Title:
+        </TextBlock>
+        <StackPanel Grid.Row="0" Grid.Column="1">
+          <TextBox x:Name="TitleBox" Margin="10,10,10,10" />
+          <TextBlock x:Name="TitleBoxValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+        <!-- Row #2, for Description -->
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="10,10,10,10">
+          Description:
+        </TextBlock>
+        <StackPanel Grid.Row="1" Grid.Column="1">
+          <TextBox x:Name="DescriptionBox" Margin="10,10,10,10" />
+          <TextBlock x:Name="DescriptionBoxValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+        <!-- Row #3, for Quantity -->
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="10,10,10,10">
+          Qunatity:
+        </TextBlock>
+        <StackPanel Grid.Row="2" Grid.Column="1">
+          <NumericUpDown x:Name="QuantityNumeric" Margin="10,10,10,10" />
+          <TextBlock x:Name="QuantityNumericValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+        <!-- Row #4, for FilmSet -->
+        <TextBlock Grid.Row="3" Grid.Column="0" Margin="10,10,10,10">
+          Movie:
+        </TextBlock>
+        <StackPanel Grid.Row="3" Grid.Column="1">
+          <ComboBox x:Name="FilmSetComboBox" Margin="10,10,10,10">
+            <ComboBox.ItemTemplate>
+              <DataTemplate>
+                <StackPanel Orientation="Horizontal">
+                  <TextBlock Text="{Binding Location}" />
+                </StackPanel>
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+          <TextBlock x:Name="FilmSetComboBoxValidation" Foreground="red" FontSize="12" />
+        </StackPanel>
+
+      </Grid>
+      <StackPanel Orientation="Horizontal">
+        <Button x:Name="AddButton">Add</Button>
+        <Button x:Name="UpdateButton" Margin="5,0">Update</Button>
+      </StackPanel>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

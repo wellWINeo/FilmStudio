@@ -11,8 +11,7 @@ public class Props : INotifyPropertyChanged
     public string Title { get; set; }
     public string Description { get; set; }
     public int Quantity { get; set; }
-    public string Location { get; set; }
-    // public virtual Movie Movie { get; set; }
+    // public string Location { get; set; }
     public virtual FilmSet FilmSet { get; set; }
 
     public event PropertyChangedEventHandler? PropertyChanged;

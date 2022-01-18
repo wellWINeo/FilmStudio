@@ -6,7 +6,7 @@ public enum Subsystem
     CastingList,
     FilmSets,
     Footages,
-    Accounting,
+    Props,
     Movies,
     Cinemas,
     Ad,
