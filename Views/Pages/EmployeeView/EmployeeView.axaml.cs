@@ -1,4 +1,3 @@
-using System;
 using System.Reactive.Disposables;
 using Avalonia;
 using Avalonia.Controls;
@@ -8,8 +7,9 @@ using ReactiveUI;
 using ReactiveUI.Validation.Extensions;
 using FilmStudio.ViewModels;
 using Avalonia.Interactivity;
-using FilmStudio.Helpers;
 using PropertyChanged;
+using System.Collections.ObjectModel;
+using FilmStudio.Models;
 
 namespace FilmStudio.Views;
 
@@ -47,9 +47,10 @@ public partial class EmployeeView : ReactiveUserControl<EmployeeViewModel>
             // default binds
             */
             this.Bind(ViewModel, vm => vm.Employees, view => view.EmployeesGrid.Items,
-                vmToViewConverterOverride: new EmployeesConverter(),
-                viewToVMConverterOverride: new EmployeesConverter())
+                vmToViewConverter: value => value,
+                viewToVmConverter: value => value as ObservableCollection<Employee>)
                 .DisposeWith(disposables);
+
             // this.Bind(ViewModel, vm => vm.Employees, view => view.EmployeesGrid.Items)
             //     .DisposeWith(disposables);
             this.Bind(ViewModel, vm => vm.EmployeeSelectedIndex, view => view.EmployeesGrid.SelectedIndex)

@@ -42,7 +42,9 @@ public class EmployeeViewModel : ViewModelBase
     public EmployeeViewModel(ApplicationContext _db, IScreen screen) :
         base(_db, screen)
     {
-        Employees = new(db.Employees);
+        Employees = new(db.Employees
+            .Include(e => e.Movies)
+            .ToList());
 
         IsEmployeeSelected = this.WhenAnyValue(
             x => x.EmployeeSelectedIndex,

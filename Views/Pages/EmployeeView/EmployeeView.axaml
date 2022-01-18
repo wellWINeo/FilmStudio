@@ -25,7 +25,7 @@
 		<!-- from to add new user -->
 		<StackPanel x:Name="AddUserForm" Margin="0,15">
 			<TextBlock FontWeight="Bold" FontSize="23">Add new Employee:</TextBlock>
-			<Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+			<Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
 				<!-- Row #1, for x:Name -->
 				<TextBlock Grid.Row="0" Grid.Column="0" Margin="10,10,10,10">
                 Name:
@@ -82,6 +82,16 @@
 				<StackPanel Grid.Row="7" Grid.Column="1">
 					<TextBox x:Name="EmployeeINNBox" Margin="10,10,10,10" />
 					<TextBlock x:Name="EmployeeINNBoxValidation" Foreground="red" FontSize="12" />
+				</StackPanel>
+
+				<!-- Row #9, for Movies -->
+				<StackPanel Grid.Row="8" Grid.Column="0" Margin="10,10">
+					<ComboBox x:Name="MoviesComboBox"></ComboBox>
+					<Button x:Name="AddMovieButton">Add movie</Button>
+				</StackPanel>
+				<StackPanel Grid.Row="8" Grid.Column="1" Margin="10,10">
+					<ListBox x:Name="MoviesListBox"></ListBox>
+					<Button x:Name="DeleteMovieButton">Delete</Button>
 				</StackPanel>
 			</Grid>
 			<StackPanel Orientation="Horizontal">

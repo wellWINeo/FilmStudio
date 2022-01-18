@@ -1,4 +1,3 @@
-using System;
 using System.Reactive.Disposables;
 using Avalonia;
 using Avalonia.Controls;
@@ -8,7 +7,6 @@ using ReactiveUI;
 using ReactiveUI.Validation.Extensions;
 using FilmStudio.ViewModels;
 using Avalonia.Interactivity;
-using FilmStudio.Helpers;
 using PropertyChanged;
 using System.Collections.ObjectModel;
 using FilmStudio.Models;
