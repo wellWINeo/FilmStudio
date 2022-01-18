@@ -55,6 +55,9 @@ class Program
         Locator.CurrentMutable.Register(() => new UserView(),
             typeof(IViewFor<UserViewModel>));
 
+        Locator.CurrentMutable.Register(() => new FootageView(),
+            typeof(IViewFor<FootageViewModel>));
+
 
         // build app
         return AppBuilder.Configure<App>()

@@ -47,7 +47,7 @@ public class MainWindowViewModel : ReactiveObject, IScreen
             ),
 
             Subsystem.Footages => Router.Navigate.Execute(
-                new ViewModelBase(db, this)
+                new FootageViewModel(db, this)
             ),
 
             Subsystem.Accounting => Router.Navigate.Execute(

@@ -11,7 +11,7 @@
 - [x] RentAgreement
 - [x] CastingActor
 - [x] CastingList
-- [ ] Footage
+- [x] Footage
 - [x] Movie
 - [ ] Props
 - [x] Positions
