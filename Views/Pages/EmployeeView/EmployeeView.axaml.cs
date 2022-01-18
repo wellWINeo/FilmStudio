@@ -39,8 +39,8 @@ public partial class EmployeeView : ReactiveUserControl<EmployeeViewModel>
             .DisposeWith(disposables);
             this.BindCommand(ViewModel, vm => vm.UpdateUserCommand, view => view.UpdateUserButton)
                 .DisposeWith(disposables);
-            this.BindCommand(ViewModel, vm => vm.DeleteUserCommand, view => view.DeleteButton,
-                vm => vm.EmployeeSelectedIndex).DisposeWith(disposables);
+            this.BindCommand(ViewModel, vm => vm.DeleteUserCommand, view => view.DeleteButton)
+                .DisposeWith(disposables);
 
 
             /* 
@@ -102,14 +102,18 @@ public partial class EmployeeView : ReactiveUserControl<EmployeeViewModel>
 
     private void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        ViewModel.Name = ViewModel.Employees[EmployeesGrid.SelectedIndex].Name;
-        ViewModel.Surname = ViewModel.Employees[EmployeesGrid.SelectedIndex].Surname;
-        ViewModel.Patronymic = ViewModel.Employees[EmployeesGrid.SelectedIndex].Patronymic;
-        ViewModel.Salary = ViewModel.Employees[EmployeesGrid.SelectedIndex].Salary;
-        ViewModel.BirthDate = ViewModel.Employees[EmployeesGrid.SelectedIndex].BirthDate;
-        ViewModel.PassportNumber = ViewModel.Employees[EmployeesGrid.SelectedIndex].PassportNumber;
-        ViewModel.SNILS = ViewModel.Employees[EmployeesGrid.SelectedIndex].SNILS;
-        ViewModel.INN = ViewModel.Employees[EmployeesGrid.SelectedIndex].INN;
+        if (0 <= ViewModel.EmployeeSelectedIndex &&
+            ViewModel.EmployeeSelectedIndex < ViewModel.Employees.Count)
+        {
+            ViewModel.Name = ViewModel.Employees[EmployeesGrid.SelectedIndex].Name;
+            ViewModel.Surname = ViewModel.Employees[EmployeesGrid.SelectedIndex].Surname;
+            ViewModel.Patronymic = ViewModel.Employees[EmployeesGrid.SelectedIndex].Patronymic;
+            ViewModel.Salary = ViewModel.Employees[EmployeesGrid.SelectedIndex].Salary;
+            ViewModel.BirthDate = ViewModel.Employees[EmployeesGrid.SelectedIndex].BirthDate;
+            ViewModel.PassportNumber = ViewModel.Employees[EmployeesGrid.SelectedIndex].PassportNumber;
+            ViewModel.SNILS = ViewModel.Employees[EmployeesGrid.SelectedIndex].SNILS;
+            ViewModel.INN = ViewModel.Employees[EmployeesGrid.SelectedIndex].INN;
+        }
     }
 
 }

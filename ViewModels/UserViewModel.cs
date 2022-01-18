@@ -24,11 +24,25 @@ public class UserViewModel : ViewModelBase
     {
         Users = new(db.Users);
 
-        // TODO: validation
+        // validation
+        this.ValidationRule(
+            vm => vm.UserName,
+            value => !string.IsNullOrWhiteSpace(value),
+            "UserName can't be empty!"
+        );
+
+        this.ValidationRule(
+            vm => vm.Password,
+            value => !string.IsNullOrWhiteSpace(value),
+            "Password can't be empty!"
+        );
+
 
         AddUser = ReactiveCommand.Create(_addUser, this.IsValid());
         UpdateUser = ReactiveCommand.Create(_updateUser, this.IsValid());
-        RemoveUser = ReactiveCommand.Create(_removeUser);
+        RemoveUser = ReactiveCommand.Create(_removeUser, this.WhenAnyValue(
+            x => x.SelectedIdx, x => 0 <= x && x < Users.Count
+        ));
     }
 
     private async void _addUser()

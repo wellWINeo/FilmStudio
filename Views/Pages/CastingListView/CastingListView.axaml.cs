@@ -62,6 +62,16 @@ public partial class CastingListView : ReactiveUserControl<CastingListViewModel>
             this.Bind(ViewModel, vm => vm.SelectedMovieIdx,
                 view => view.MovieComboBox.SelectedIndex).DisposeWith(disposables);
 
+            // bind validation
+            this.BindValidation(ViewModel, vm => vm.Role, view => view.RoleBoxValidation.Text)
+                .DisposeWith(disposables);
+            this.BindValidation(ViewModel, vm => vm.AtDateTime, view => view.DatePickerValidation.Text)
+                .DisposeWith(disposables);
+            this.BindValidation(ViewModel, vm => vm.SelectedActorIdx,
+                view => view.CastingActorComboBoxValidation.Text).DisposeWith(disposables);
+            this.BindValidation(ViewModel, vm => vm.SelectedMovieIdx,
+                view => view.MovieComboBoxValidation.Text).DisposeWith(disposables);
+
             // bind commands
             this.BindCommand(ViewModel, vm => vm.AddToCastingList, view => view.AddButton)
                 .DisposeWith(disposables);

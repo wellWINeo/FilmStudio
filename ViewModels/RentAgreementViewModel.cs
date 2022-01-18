@@ -79,7 +79,9 @@ public class RentAgreementViewModel : ViewModelBase
 
         AddRentAgreement = ReactiveCommand.Create(_addRentAgreement, this.IsValid());
         UpdateRentAgreement = ReactiveCommand.Create(_updateRentAgreement, this.IsValid());
-        RemoveRentAgreement = ReactiveCommand.Create(_removeRentAgreement);
+        RemoveRentAgreement = ReactiveCommand.Create(_removeRentAgreement, this.WhenAnyValue(
+            x => x.SelectedIdx, x => 0 <= x && x < RentAgreements.Count
+        ));
     }
 
     private async void _addRentAgreement()

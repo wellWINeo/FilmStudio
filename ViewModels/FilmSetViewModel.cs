@@ -35,11 +35,24 @@ public class FilmSetViewModel : ViewModelBase
 
         Movies = new(db.Movies);
 
-        // TODO: validation
+        // validation
+        this.ValidationRule(
+            vm => vm.Location,
+            value => !string.IsNullOrWhiteSpace(value),
+            "Location can't be empty"
+        );
+
+        this.ValidationRule(
+            vm => vm.SelectedMovieIdx,
+            value => 0 <= value && value < Movies.Count,
+            "Select movie!"
+        );
 
         AddFilmSet = ReactiveCommand.Create(_addFilmSet, this.IsValid());
         UpdateFilmSet = ReactiveCommand.Create(_updateFilmSet, this.IsValid());
-        RemoveFilmSet = ReactiveCommand.Create(_removeFilmSet);
+        RemoveFilmSet = ReactiveCommand.Create(_removeFilmSet, this.WhenAnyValue(
+            x => x.SelectedIdx, x => 0 <= x && x < FilmSets.Count
+        ));
     }
 
     private async void _addFilmSet()

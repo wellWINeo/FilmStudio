@@ -19,7 +19,7 @@
 
     <!-- from to add/update -->
     <StackPanel x:Name="AddForm" Margin="0,15">
-      <TextBlock FontWeight="Bold" FontSize="23">Casting actor form:</TextBlock>
+      <TextBlock FontWeight="Bold" FontSize="23">Props form:</TextBlock>
       <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
         <!-- Row #1, for Title -->
         <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,10,10,10">

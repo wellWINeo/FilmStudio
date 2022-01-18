@@ -3,6 +3,7 @@ using System.Reactive;
 using FilmStudio.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using ReactiveUI.Validation.Extensions;
 
 namespace FilmStudio.ViewModels;
 
@@ -21,11 +22,18 @@ public class PositionViewModel : ViewModelBase
     {
         Positions = new(db.Positions);
 
-        // TODO: add validation
+        // validation
+        this.ValidationRule(
+            vm => vm.Title,
+            value => !string.IsNullOrWhiteSpace(value),
+            "Title can't be empty"
+        );
 
-        AddPosition = ReactiveCommand.Create(_addPosition);
-        UpdatePosition = ReactiveCommand.Create(_updatePosition);
-        RemovePosition = ReactiveCommand.Create(_removePosition);
+        AddPosition = ReactiveCommand.Create(_addPosition, this.IsValid());
+        UpdatePosition = ReactiveCommand.Create(_updatePosition, this.IsValid());
+        RemovePosition = ReactiveCommand.Create(_removePosition, this.WhenAnyValue(
+            x => x.SelectedIdx, x => 0 <= x && x < Positions.Count
+        ));
     }
 
     private async void _addPosition()

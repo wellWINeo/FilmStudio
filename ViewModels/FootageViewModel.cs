@@ -46,11 +46,42 @@ public class FootageViewModel : ViewModelBase
         );
         Movies = new(db.Movies);
 
-        // TODO: validation
+        // validation
+        this.ValidationRule(
+            vm => vm.SceneName,
+            value => !string.IsNullOrWhiteSpace(value),
+            "Scene name can't be empty!"
+        );
+
+        this.ValidationRule(
+            vm => vm.TimeSpan,
+            value => value != null,
+            "Specify time span!"
+        );
+
+        this.ValidationRule(
+            vm => vm.TakeCount,
+            value => value > 0,
+            "Take count must be grater than 0!"
+        );
+
+        this.ValidationRule(
+            vm => vm.SelectedMovieIdx,
+            value => 0 <= value && value <= Movies.Count,
+            "Choose movie!"
+        );
+
+        this.ValidationRule(
+            vm => vm.SelectedStatusIdx,
+            value => 0 <= value && value <= Statuses.Length,
+            "Choose status!"
+        );
 
         AddFootage = ReactiveCommand.Create(_addFootage, this.IsValid());
         UpdateFootage = ReactiveCommand.Create(_updateFootage, this.IsValid());
-        RemoveFootage = ReactiveCommand.Create(_removeFootage);
+        RemoveFootage = ReactiveCommand.Create(_removeFootage, this.WhenAnyValue(
+            x => x.SelectedIdx, x => 0 <= x && x < Footages.Count
+        ));
     }
 
     private async void _addFootage()

@@ -40,7 +40,7 @@
         </TextBlock>
         <StackPanel Grid.Row="1" Grid.Column="1">
           <DatePicker x:Name="DatePicker" Margin="10,10,10,10" />
-          <TextBlock x:Name="DateTimePickerValidation" Foreground="red" FontSize="12" />
+          <TextBlock x:Name="DatePickerValidation" Foreground="red" FontSize="12" />
         </StackPanel>
 
         <!-- Row #3, for Movie -->

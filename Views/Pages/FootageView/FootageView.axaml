@@ -36,7 +36,7 @@
           Time span:
         </TextBlock>
         <StackPanel Grid.Row="1" Grid.Column="1">
-          <TimePicker x:Name="TimeSpanPicker" Margin="10,10,10,10" />
+          <TimePicker x:Name="TimeSpanPicker" Margin="10,10,10,10" ClockIdentifier="24HourClock" />
           <TextBlock x:Name="TimeSpanPickerValidation" Foreground="red" FontSize="12" />
         </StackPanel>
 

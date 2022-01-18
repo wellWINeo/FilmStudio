@@ -8,6 +8,7 @@ using PropertyChanged;
 using ReactiveUI;
 using System.Collections.ObjectModel;
 using FilmStudio.Models;
+using ReactiveUI.Validation.Extensions;
 
 namespace FilmStudio.Views;
 
@@ -20,23 +21,32 @@ public partial class PositionView : ReactiveUserControl<PositionViewModel>
         InitializeComponent();
         this.WhenActivated(disposables =>
         {
+            // bind source
             this.Bind(ViewModel, vm => vm.Positions, view => view.PositionsGrid.Items,
                 vmToViewConverter: v => v,
                 viewToVmConverter: v => v as ObservableCollection<Position>)
                 .DisposeWith(disposables);
 
+            // bind
             this.Bind(ViewModel, vm => vm.SelectedIdx,
                 view => view.PositionsGrid.SelectedIndex)
                 .DisposeWith(disposables);
             this.Bind(ViewModel, vm => vm.Title, view => view.NameBox.Text)
                 .DisposeWith(disposables);
 
+            // bind validation
+            this.BindValidation(ViewModel, vm => vm.Title,
+                view => view.NameBoxValidation.Text)
+                .DisposeWith(disposables);
+
+            // bind commands
             this.BindCommand(ViewModel, vm => vm.AddPosition, view => view.AddButton)
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel, vm => vm.UpdatePosition, view => view.UpdateButton)
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel, vm => vm.RemovePosition, view => view.DeleteButton)
                 .DisposeWith(disposables);
+
         });
     }
 

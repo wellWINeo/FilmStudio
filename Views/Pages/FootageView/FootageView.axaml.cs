@@ -11,6 +11,7 @@ using FilmStudio.ViewModels;
 using PropertyChanged;
 using ReactiveUI;
 using System;
+using ReactiveUI.Validation.Extensions;
 
 namespace FilmStudio.Views;
 
@@ -63,6 +64,23 @@ public partial class FootageView : ReactiveUserControl<FootageViewModel>
             this.Bind(ViewModel, vm => vm.SelectedMovieIdx, view => view.MovieComboBox.SelectedIndex)
                 .DisposeWith(disposables);
             this.Bind(ViewModel, vm => vm.SelectedStatusIdx, view => view.StatusComboBox.SelectedIndex)
+                .DisposeWith(disposables);
+
+            // bind validation
+            this.BindValidation(ViewModel, vm => vm.SceneName,
+                view => view.SceneBoxValidation.Text)
+                .DisposeWith(disposables);
+            this.BindValidation(ViewModel, vm => vm.TimeSpan,
+                view => view.TimeSpanPickerValidation.Text)
+                .DisposeWith(disposables);
+            this.BindValidation(ViewModel, vm => vm.TakeCount,
+                view => view.TakeCountNumericValidation.Text)
+                .DisposeWith(disposables);
+            this.BindValidation(ViewModel, vm => vm.SelectedMovieIdx,
+                view => view.MovieComboBoxValidation.Text)
+                .DisposeWith(disposables);
+            this.BindValidation(ViewModel, vm => vm.SelectedStatusIdx,
+                view => view.StatusComboBoxValidation.Text)
                 .DisposeWith(disposables);
 
             // commands

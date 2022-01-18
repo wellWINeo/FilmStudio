@@ -74,7 +74,9 @@ public class AdViewModel : ViewModelBase
 
         AddAd = ReactiveCommand.Create(_addAd, this.IsValid());
         UpdateAd = ReactiveCommand.Create(_updateAd, this.IsValid());
-        RemoveAd = ReactiveCommand.Create(_removeAd);
+        RemoveAd = ReactiveCommand.Create(_removeAd, this.WhenAnyValue(
+            x => x.SelectedAdIdx, x => 0 <= x && x < Ads.Count
+        ));
     }
 
     private async void _addAd()

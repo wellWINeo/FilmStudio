@@ -9,6 +9,7 @@ using ReactiveUI;
 using System.Collections.ObjectModel;
 using FilmStudio.Models;
 using Avalonia.Interactivity;
+using ReactiveUI.Validation.Extensions;
 
 namespace FilmStudio.Views;
 
@@ -56,7 +57,21 @@ public partial class PropsView : ReactiveUserControl<PropsViewModel>
                 .DisposeWith(disposables);
             this.Bind(ViewModel, vm => vm.Description, view => view.DescriptionBox.Text)
                 .DisposeWith(disposables);
-            this.Bind(ViewModel, vm => vm.Qunatity, view => view.QuantityNumeric.Value)
+            this.Bind(ViewModel, vm => vm.Quantity, view => view.QuantityNumeric.Value)
+                .DisposeWith(disposables);
+
+            // bind validation
+            this.BindValidation(ViewModel, vm => vm.Title,
+                view => view.TitleBoxValidation.Text)
+                .DisposeWith(disposables);
+            this.BindValidation(ViewModel, vm => vm.Description,
+                view => view.DescriptionBoxValidation.Text)
+                .DisposeWith(disposables);
+            this.BindValidation(ViewModel, vm => vm.Quantity,
+                view => view.QuantityNumericValidation.Text)
+                .DisposeWith(disposables);
+            this.BindValidation(ViewModel, vm => vm.SelectedFilmSetIdx,
+                view => view.FilmSetComboBoxValidation.Text)
                 .DisposeWith(disposables);
 
             // bind commands
@@ -76,6 +91,6 @@ public partial class PropsView : ReactiveUserControl<PropsViewModel>
     {
         ViewModel.Title = ViewModel.Props[PropsGrid.SelectedIndex].Title;
         ViewModel.Description = ViewModel.Props[PropsGrid.SelectedIndex].Description;
-        ViewModel.Qunatity = ViewModel.Props[PropsGrid.SelectedIndex].Quantity;
+        ViewModel.Quantity = ViewModel.Props[PropsGrid.SelectedIndex].Quantity;
     }
 }

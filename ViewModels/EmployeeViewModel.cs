@@ -27,6 +27,8 @@ public class EmployeeViewModel : ViewModelBase
 
     [Reactive] public int EmployeeSelectedIndex { get; set; }
 
+    public IObservable<bool> IsEmployeeSelected { get; set; }
+
     // protperties for Employee model
     [Reactive] public string Name { get; set; } = string.Empty;
     [Reactive] public string Surname { get; set; } = string.Empty;
@@ -41,12 +43,11 @@ public class EmployeeViewModel : ViewModelBase
         base(_db, screen)
     {
         Employees = new(db.Employees);
-        // Employees = new ObservableCollection<Employee>()
-        // {
-        //     new Employee {Name="Name1", Surname="Surname1", Patronymic="Patronymic1"},
-        //     new Employee {Name="Name2", Surname="Surname2", Patronymic="Patronymic2"},
-        //     new Employee {Name="Name3", Surname="Surname3", Patronymic="Patronymic3"},
-        // };
+
+        IsEmployeeSelected = this.WhenAnyValue(
+            x => x.EmployeeSelectedIndex,
+            idx => 0 <= idx && idx < Employees.Count
+        );
 
         // configure validation rules
         this.ValidationRule(
@@ -100,7 +101,7 @@ public class EmployeeViewModel : ViewModelBase
         // init commands
         AddUserCommand = ReactiveCommand.Create(_addUserCommand, this.IsValid());
         UpdateUserCommand = ReactiveCommand.Create(_updateUserCommand, this.IsValid());
-        DeleteUserCommand = ReactiveCommand.Create(_deleteUserCommand);
+        DeleteUserCommand = ReactiveCommand.Create(_deleteUserCommand, IsEmployeeSelected);
     }
 
     private async void _addUserCommand()

@@ -31,7 +31,9 @@ public class AdTypeViewModel : ViewModelBase
 
         AddAdType = ReactiveCommand.Create(_adAdType, this.IsValid());
         UpdateAdType = ReactiveCommand.Create(_updateAdType, this.IsValid());
-        RemoveAdType = ReactiveCommand.Create(_removeAdType);
+        RemoveAdType = ReactiveCommand.Create(_removeAdType, this.WhenAnyValue(
+            x => x.SelectedAdIndex, x => 0 <= x && x < AdTypes.Count
+        ));
 
     }
 

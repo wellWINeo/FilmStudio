@@ -49,7 +49,9 @@ public class MovieViewModel : ViewModelBase
 
         AddMovie = ReactiveCommand.Create(_addMovie, this.IsValid());
         UpdateMovie = ReactiveCommand.Create(_updateMovie, this.IsValid());
-        RemoveMovie = ReactiveCommand.Create(_removeMovie);
+        RemoveMovie = ReactiveCommand.Create(_removeMovie, this.WhenAnyValue(
+            x => x.SelectedMovieIndex, x => 0 <= x && x < Movies.Count
+        ));
 
     }
 
@@ -70,7 +72,7 @@ public class MovieViewModel : ViewModelBase
 
     private async void _removeMovie()
     {
-        if (0 <= SelectedStatusIndex && SelectedStatusIndex <= Movies.Count())
+        if (0 <= SelectedStatusIndex && SelectedStatusIndex <= Movies.Count)
         {
             db.Movies.Remove(Movies[SelectedMovieIndex]);
             await db.SaveChangesAsync();

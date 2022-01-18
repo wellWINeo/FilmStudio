@@ -16,7 +16,7 @@ public class PropsViewModel : ViewModelBase
 
     [Reactive] public string Title { get; set; }
     [Reactive] public string Description { get; set; }
-    [Reactive] public int Qunatity { get; set; }
+    [Reactive] public int Quantity { get; set; }
 
     [Reactive] public int SelectedIdx { get; set; }
     [Reactive] public int SelectedFilmSetIdx { get; set; }
@@ -38,7 +38,30 @@ public class PropsViewModel : ViewModelBase
 
         FilmSets = new(db.FilmSets.Include(e => e.Movie).ToList());
 
-        // TODO: validation
+        // validation
+        this.ValidationRule(
+            vm => vm.Title,
+            value => !string.IsNullOrWhiteSpace(value),
+            "Title can't be empty!"
+        );
+
+        this.ValidationRule(
+            vm => vm.Description,
+            value => !string.IsNullOrWhiteSpace(value),
+            "Description can't be empty!"
+        );
+
+        this.ValidationRule(
+            vm => vm.Quantity,
+            value => value >= 0,
+            "Can't be negative!"
+        );
+
+        this.ValidationRule(
+            vm => vm.SelectedFilmSetIdx,
+            value => 0 <= value && value < FilmSets.Count,
+            "Choose film set!"
+        );
 
         AddProps = ReactiveCommand.Create(_addProps, this.IsValid());
         UpdateProps = ReactiveCommand.Create(_updateProps, this.IsValid());
@@ -51,7 +74,7 @@ public class PropsViewModel : ViewModelBase
         {
             Title = Title,
             Description = Description,
-            Quantity = Qunatity,
+            Quantity = Quantity,
             FilmSet = SelectedFilmSet()
         };
 
@@ -64,7 +87,7 @@ public class PropsViewModel : ViewModelBase
     {
         SelectedProps().Title = Title;
         SelectedProps().Description = Description;
-        SelectedProps().Quantity = Qunatity;
+        SelectedProps().Quantity = Quantity;
         SelectedProps().FilmSet = SelectedFilmSet();
 
         db.Props.Update(SelectedProps());

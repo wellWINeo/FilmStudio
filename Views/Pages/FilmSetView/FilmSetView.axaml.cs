@@ -9,6 +9,7 @@ using PropertyChanged;
 using ReactiveUI;
 using System.Collections.ObjectModel;
 using FilmStudio.Models;
+using ReactiveUI.Validation.Extensions;
 
 namespace FilmStudio.Views;
 
@@ -55,6 +56,14 @@ public partial class FilmSetView : ReactiveUserControl<FilmSetViewModel>
             this.Bind(ViewModel, vm => vm.Location, view => view.LocationBox.Text)
                 .DisposeWith(disposables);
 
+            // bind validation
+            this.BindValidation(ViewModel, vm => vm.Location,
+                view => view.LocationBoxValidation.Text)
+                .DisposeWith(disposables);
+            this.BindValidation(ViewModel, vm => vm.SelectedMovieIdx,
+                view => view.MovieComboBoxValidation.Text)
+                .DisposeWith(disposables);
+
             // command
             this.BindCommand(ViewModel, vm => vm.AddFilmSet, view => view.AddButton)
                 .DisposeWith(disposables);
@@ -70,15 +79,6 @@ public partial class FilmSetView : ReactiveUserControl<FilmSetViewModel>
 
     private void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        //     ViewModel.SceneName = ViewModel.Footages[ViewModel.SelectedIdx].SceneName;
-        //     ViewModel.TimeSpan = ViewModel.Footages[ViewModel.SelectedIdx].TimeSpan;
-        //     ViewModel.TakeCount = ViewModel.Footages[ViewModel.SelectedIdx].TakeCount;
-
-        // TODO: what the fuck!!!
-
-        //     ViewModel.SelectedMovieIdx = ViewModel.Movies.IndexOf(
-        //         ViewModel.Movies.ElementAt(ViewModel.SelectedMovieIdx)
-        //     );
-        // }
+        ViewModel!.Location = ViewModel.FilmSets[ViewModel.SelectedIdx].Location;
     }
 }

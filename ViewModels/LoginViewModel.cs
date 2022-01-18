@@ -17,7 +17,10 @@ public class LoginViewModel : ViewModelBase
     public LoginViewModel(ApplicationContext _db, IScreen screen) :
         base(_db, screen)
     {
-        Login = ReactiveCommand.Create(_login);
+        Login = ReactiveCommand.Create(_login, this.WhenAnyValue(
+            x => x.UserName, y => y.Password,
+            (x, y) => !string.IsNullOrWhiteSpace(x) && !string.IsNullOrWhiteSpace(y)
+        ));
     }
 
     private void _login() =>

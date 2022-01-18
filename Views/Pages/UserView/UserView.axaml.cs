@@ -9,6 +9,7 @@ using PropertyChanged;
 using ReactiveUI;
 using System.Collections.ObjectModel;
 using FilmStudio.Models;
+using ReactiveUI.Validation.Extensions;
 
 namespace FilmStudio.Views;
 
@@ -33,6 +34,7 @@ public partial class UserView : ReactiveUserControl<UserViewModel>
         InitializeComponent();
         this.WhenActivated(disposables =>
         {
+            // bind
             this.Bind(ViewModel, vm => vm.SelectedIdx, view => view.UsersGrid.SelectedIndex)
                 .DisposeWith(disposables);
             this.Bind(ViewModel, vm => vm.Users, view => view.UsersGrid.Items,
@@ -40,11 +42,21 @@ public partial class UserView : ReactiveUserControl<UserViewModel>
                 viewToVmConverter: v => v as ObservableCollection<User>)
                 .DisposeWith(disposables);
 
+            // bind attributes
             this.Bind(ViewModel, vm => vm.UserName, view => view.UserNameBox.Text)
                 .DisposeWith(disposables);
             this.Bind(ViewModel, vm => vm.Password, view => view.PasswordBox.Text)
                 .DisposeWith(disposables);
 
+            // bind validation
+            this.BindValidation(ViewModel, vm => vm.UserName,
+                view => view.UserNameBoxValidation.Text)
+                .DisposeWith(disposables);
+            this.BindValidation(ViewModel, vm => vm.Password,
+                view => view.PasswordBoxValidation.Text)
+                .DisposeWith(disposables);
+
+            // bind commands
             this.BindCommand(ViewModel, vm => vm.AddUser, view => view.AddButton)
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel, vm => vm.UpdateUser, view => view.UpdateButton)

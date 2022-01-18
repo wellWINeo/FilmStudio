@@ -17,7 +17,7 @@ public class CastingListViewModel : ViewModelBase
     public ObservableCollection<CastingActor> CastingActors { get; set; }
 
     [Reactive] public string Role { get; set; }
-    [Reactive] public DateTimeOffset? AtDateTime { get; set; }
+    [Reactive] public DateTimeOffset? AtDateTime { get; set; } = DateTimeOffset.Now;
 
     [Reactive] public int SelectedMovieIdx { get; set; }
     [Reactive] public int SelectedActorIdx { get; set; }
@@ -44,11 +44,36 @@ public class CastingListViewModel : ViewModelBase
         Movies = new(db.Movies);
         CastingActors = new(db.CastingActors);
 
-        // TODO: add validation
+        // validation
+        this.ValidationRule(
+            vm => vm.Role,
+            value => !string.IsNullOrWhiteSpace(value),
+            "Role can't be empty!"
+        );
+
+        this.ValidationRule(
+            vm => vm.AtDateTime,
+            value => value != null,
+            "Select date!"
+        );
+
+        this.ValidationRule(
+            vm => vm.SelectedMovieIdx,
+            value => 0 <= value && value < Movies.Count,
+            "Select movie!"
+        );
+
+        this.ValidationRule(
+            vm => vm.SelectedActorIdx,
+            value => 0 <= value && value < CastingActors.Count,
+            "Select actor to cast!"
+        );
 
         AddToCastingList = ReactiveCommand.Create(_addToCastingList, this.IsValid());
         UpdateInCastingList = ReactiveCommand.Create(_updateInCastingList, this.IsValid());
-        RemoveFromCastingList = ReactiveCommand.Create(_removeFromCastingList);
+        RemoveFromCastingList = ReactiveCommand.Create(_removeFromCastingList, this.WhenAnyValue(
+            x => x.SelectedIdx, x => 0 <= x && x < CastingLists.Count
+        ));
 
     }
 

@@ -26,9 +26,11 @@ public class CinemasViewModel : ViewModelBase
         base(_db, screen)
     {
         Cinemas = new(db.Cinemas);
-        AddCinema = ReactiveCommand.Create(_addCinema);
-        UpdateCinema = ReactiveCommand.Create(_updateCinema);
-        RemoveCinema = ReactiveCommand.Create(_removeCinema);
+        AddCinema = ReactiveCommand.Create(_addCinema, this.IsValid());
+        UpdateCinema = ReactiveCommand.Create(_updateCinema, this.IsValid());
+        RemoveCinema = ReactiveCommand.Create(_removeCinema, this.WhenAnyValue(
+            x => x.SelectedCinemaIndex, x => 0 <= x && x < Cinemas.Count
+        ));
 
         this.ValidationRule(
             vm => vm.Title,

@@ -46,7 +46,9 @@ public class CastingActorViewModel : ViewModelBase
 
         AddCastingActor = ReactiveCommand.Create(_addCastingActor, this.IsValid());
         UpdateCastingActor = ReactiveCommand.Create(_updateRentAgreement, this.IsValid());
-        DeleteCastingActor = ReactiveCommand.Create(_removeRentAgreement);
+        DeleteCastingActor = ReactiveCommand.Create(_removeRentAgreement, this.WhenAnyValue(
+            x => x.SelectedIdx, x => 0 <= x && x < CastingActors.Count
+        ));
     }
 
     private async void _addCastingActor()

@@ -13,16 +13,19 @@
 - [x] CastingList
 - [x] Footage
 - [x] Movie
-- [ ] Props
+- [x] Props
 - [x] Positions
 - [x] FilmSet
 - [x] Employee
 - [x] Users
 
 ## Improves
-- [ ] Fix bugs
-- [ ] Add validation, where forgot
+- [x] Add validation, where forgot
+- [x] Check selection in update/remove logic
+- [ ] Update when nothing selected
 - [ ] Add interaction logic for One2Many relations (Probably ListBox)
+- [ ] Changing value in ComboBox on SelectionChanged in Grid
+- [ ] Improve design
 
 ## Bugs
 - [x] DataGrid not updates after item's property change
