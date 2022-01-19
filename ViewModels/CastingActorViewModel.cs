@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Linq;
 using FilmStudio.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -45,13 +46,16 @@ public class CastingActorViewModel : ViewModelBase
         );
 
         AddCastingActor = ReactiveCommand.Create(_addCastingActor, this.IsValid());
-        UpdateCastingActor = ReactiveCommand.Create(_updateRentAgreement, this.IsValid());
+        UpdateCastingActor = ReactiveCommand.Create(_updateRentAgreement, Observable.CombineLatest(
+            this.IsValid(), this.WhenAnyValue(x => x.SelectedIdx, x => 0 <= x && x < CastingActors.Count),
+            (x, y) => x && y
+        ));
         DeleteCastingActor = ReactiveCommand.Create(_removeRentAgreement, this.WhenAnyValue(
             x => x.SelectedIdx, x => 0 <= x && x < CastingActors.Count
         ));
     }
 
-    private async void _addCastingActor()
+    private void _addCastingActor()
     {
         var actor = new CastingActor()
         {
@@ -60,25 +64,25 @@ public class CastingActorViewModel : ViewModelBase
             Patronymic = Patronymic,
         };
 
-        await db.CastingActors.AddAsync(actor);
-        await db.SaveChangesAsync();
+        db.CastingActors.Add(actor);
+        db.SaveChanges();
         CastingActors.Add(actor);
     }
 
-    private async void _removeRentAgreement()
+    private void _removeRentAgreement()
     {
         db.CastingActors.Remove(CastingActors[SelectedIdx]);
-        await db.SaveChangesAsync();
+        db.SaveChanges();
         CastingActors.RemoveAt(SelectedIdx);
     }
 
-    private async void _updateRentAgreement()
+    private void _updateRentAgreement()
     {
         CastingActors[SelectedIdx].Name = Name;
         CastingActors[SelectedIdx].Surname = Surname;
         CastingActors[SelectedIdx].Patronymic = Patronymic;
 
         db.CastingActors.Update(CastingActors[SelectedIdx]);
-        await db.SaveChangesAsync();
+        db.SaveChanges();
     }
 }

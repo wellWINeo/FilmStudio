@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FilmStudio.Models;
 using ReactiveUI;
@@ -27,7 +28,10 @@ public class CinemasViewModel : ViewModelBase
     {
         Cinemas = new(db.Cinemas);
         AddCinema = ReactiveCommand.Create(_addCinema, this.IsValid());
-        UpdateCinema = ReactiveCommand.Create(_updateCinema, this.IsValid());
+        UpdateCinema = ReactiveCommand.Create(_updateCinema, Observable.CombineLatest(
+            this.IsValid(), this.WhenAnyValue(x => x.SelectedCinemaIndex, x => 0 <= x && x < Cinemas.Count),
+            (x, y) => x && y
+        ));
         RemoveCinema = ReactiveCommand.Create(_removeCinema, this.WhenAnyValue(
             x => x.SelectedCinemaIndex, x => 0 <= x && x < Cinemas.Count
         ));
@@ -45,30 +49,30 @@ public class CinemasViewModel : ViewModelBase
         );
     }
 
-    private async void _addCinema()
+    private void _addCinema()
     {
         var cinema = new Cinema()
         {
             Title = Title,
             Address = Address
         };
-        await db.Cinemas.AddAsync(cinema);
-        await db.SaveChangesAsync();
+        db.Cinemas.Add(cinema);
+        db.SaveChanges();
         Cinemas.Add(cinema);
     }
 
-    private async void _updateCinema()
+    private void _updateCinema()
     {
         Cinemas[SelectedCinemaIndex].Title = Title;
         Cinemas[SelectedCinemaIndex].Address = Address;
         db.Cinemas.Update(Cinemas[SelectedCinemaIndex]);
-        await db.SaveChangesAsync();
+        db.SaveChanges();
     }
 
-    private async void _removeCinema()
+    private void _removeCinema()
     {
         db.Cinemas.Remove(Cinemas[SelectedCinemaIndex]);
-        await db.SaveChangesAsync();
+        db.SaveChanges();
         Cinemas.RemoveAt(SelectedCinemaIndex);
     }
 }

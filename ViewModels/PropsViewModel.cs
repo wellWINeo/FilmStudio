@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using FilmStudio.Models;
 using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
@@ -64,8 +65,13 @@ public class PropsViewModel : ViewModelBase
         );
 
         AddProps = ReactiveCommand.Create(_addProps, this.IsValid());
-        UpdateProps = ReactiveCommand.Create(_updateProps, this.IsValid());
-        RemoveProps = ReactiveCommand.Create(_removeProps);
+        UpdateProps = ReactiveCommand.Create(_updateProps, Observable.CombineLatest(
+            this.IsValid(), this.WhenAnyValue(x => x.SelectedIdx, x => 0 <= x && x < Props.Count),
+            (x, y) => x && y
+        ));
+        RemoveProps = ReactiveCommand.Create(_removeProps, this.WhenAnyValue(
+            x => x.SelectedIdx, x => 0 <= x && x < Props.Count
+        ));
     }
 
     private void _addProps()

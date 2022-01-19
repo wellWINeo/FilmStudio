@@ -89,8 +89,11 @@ public partial class PropsView : ReactiveUserControl<PropsViewModel>
 
     private void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        ViewModel.Title = ViewModel.Props[PropsGrid.SelectedIndex].Title;
-        ViewModel.Description = ViewModel.Props[PropsGrid.SelectedIndex].Description;
-        ViewModel.Quantity = ViewModel.Props[PropsGrid.SelectedIndex].Quantity;
+        if (0 <= ViewModel.SelectedIdx && ViewModel.SelectedIdx < ViewModel.Props.Count)
+        {
+            ViewModel.Title = ViewModel.Props[PropsGrid.SelectedIndex].Title;
+            ViewModel.Description = ViewModel.Props[PropsGrid.SelectedIndex].Description;
+            ViewModel.Quantity = ViewModel.Props[PropsGrid.SelectedIndex].Quantity;
+        }
     }
 }

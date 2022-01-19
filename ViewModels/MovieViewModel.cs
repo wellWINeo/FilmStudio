@@ -1,6 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Linq;
 using FilmStudio.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -48,14 +49,17 @@ public class MovieViewModel : ViewModelBase
         );
 
         AddMovie = ReactiveCommand.Create(_addMovie, this.IsValid());
-        UpdateMovie = ReactiveCommand.Create(_updateMovie, this.IsValid());
+        UpdateMovie = ReactiveCommand.Create(_updateMovie, Observable.CombineLatest(
+            this.IsValid(), this.WhenAnyValue(x => x.SelectedMovieIndex, x => 0 <= x && x < Movies.Count),
+            (x, y) => x && y
+        ));
         RemoveMovie = ReactiveCommand.Create(_removeMovie, this.WhenAnyValue(
             x => x.SelectedMovieIndex, x => 0 <= x && x < Movies.Count
         ));
 
     }
 
-    private async void _addMovie()
+    private void _addMovie()
     {
         var movie = new Movie()
         {
@@ -65,22 +69,22 @@ public class MovieViewModel : ViewModelBase
             Status = _castMovieStatus()
         };
 
-        await db.Movies.AddAsync(movie);
-        await db.SaveChangesAsync();
+        db.Movies.Add(movie);
+        db.SaveChanges();
         Movies.Add(movie);
     }
 
-    private async void _removeMovie()
+    private void _removeMovie()
     {
         if (0 <= SelectedStatusIndex && SelectedStatusIndex <= Movies.Count)
         {
             db.Movies.Remove(Movies[SelectedMovieIndex]);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
             Movies.RemoveAt(SelectedMovieIndex);
         }
     }
 
-    private async void _updateMovie()
+    private void _updateMovie()
     {
         Movies[SelectedMovieIndex].Title = Title;
         Movies[SelectedMovieIndex].Description = Description;
@@ -88,7 +92,7 @@ public class MovieViewModel : ViewModelBase
         Movies[SelectedMovieIndex].Status = _castMovieStatus();
 
         db.Movies.Update(Movies[SelectedMovieIndex]);
-        await db.SaveChangesAsync();
+        db.SaveChanges();
     }
 
     private MovieStatus _castMovieStatus()

@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using FilmStudio.Models;
 using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
@@ -49,13 +50,16 @@ public class FilmSetViewModel : ViewModelBase
         );
 
         AddFilmSet = ReactiveCommand.Create(_addFilmSet, this.IsValid());
-        UpdateFilmSet = ReactiveCommand.Create(_updateFilmSet, this.IsValid());
+        UpdateFilmSet = ReactiveCommand.Create(_updateFilmSet, Observable.CombineLatest(
+            this.IsValid(), this.WhenAnyValue(x => x.SelectedIdx, x => 0 <= x && x < FilmSets.Count),
+            (x, y) => x && y
+        ));
         RemoveFilmSet = ReactiveCommand.Create(_removeFilmSet, this.WhenAnyValue(
             x => x.SelectedIdx, x => 0 <= x && x < FilmSets.Count
         ));
     }
 
-    private async void _addFilmSet()
+    private void _addFilmSet()
     {
         var filmSet = new FilmSet()
         {
@@ -63,8 +67,8 @@ public class FilmSetViewModel : ViewModelBase
             Movie = SelectedMovie()
         };
 
-        await db.FilmSets.AddAsync(filmSet);
-        await db.SaveChangesAsync();
+        db.FilmSets.Add(filmSet);
+        db.SaveChanges();
         FilmSets.Add(filmSet);
     }
 
@@ -77,10 +81,10 @@ public class FilmSetViewModel : ViewModelBase
         db.SaveChanges();
     }
 
-    private async void _removeFilmSet()
+    private void _removeFilmSet()
     {
         db.FilmSets.Remove(SelectedFilmSet());
-        await db.SaveChangesAsync();
+        db.SaveChanges();
         FilmSets.RemoveAt(SelectedIdx);
     }
 }

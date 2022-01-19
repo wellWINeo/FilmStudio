@@ -27,7 +27,10 @@ public class MainWindowViewModel : ReactiveObject, IScreen
     {
         db = new();
         loginViewModel = new(db, this);
-        ChangeView = ReactiveCommand.CreateFromObservable(_changeView);
+        ChangeView = ReactiveCommand.CreateFromObservable(_changeView, this.WhenAnyValue(
+            x => x.CurrentIndex,
+            x => 0 <= x && x < ListOfSubsystems.Length
+        ));
     }
 
 
@@ -84,6 +87,10 @@ public class MainWindowViewModel : ReactiveObject, IScreen
 
             Subsystem.Props => Router.Navigate.Execute(
                 new PropsViewModel(db, this)
-            )
+            ),
+
+            _ => Router.Navigate.Execute(
+                new ViewModelBase(db, this)
+            ),
         };
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using FilmStudio.Models;
 using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
@@ -78,13 +79,16 @@ public class FootageViewModel : ViewModelBase
         );
 
         AddFootage = ReactiveCommand.Create(_addFootage, this.IsValid());
-        UpdateFootage = ReactiveCommand.Create(_updateFootage, this.IsValid());
+        UpdateFootage = ReactiveCommand.Create(_updateFootage, Observable.CombineLatest(
+            this.IsValid(), this.WhenAnyValue(x => x.SelectedIdx, x => 0 <= x && x < Footages.Count),
+            (x, y) => x && y
+        ));
         RemoveFootage = ReactiveCommand.Create(_removeFootage, this.WhenAnyValue(
             x => x.SelectedIdx, x => 0 <= x && x < Footages.Count
         ));
     }
 
-    private async void _addFootage()
+    private void _addFootage()
     {
         var footage = new Footage()
         {
@@ -95,23 +99,24 @@ public class FootageViewModel : ViewModelBase
             Movie = SelectedMovie
         };
 
-        await db.Footages.AddAsync(footage);
-        await db.SaveChangesAsync();
+        db.Footages.Add(footage);
+        db.SaveChanges();
         Footages.Add(footage);
     }
 
     private void _updateFootage()
     {
-        SelectedFootage.SceneName = SceneName;
-        SelectedFootage.TimeSpan = TimeSpan;
-        SelectedFootage.TakeCount = TakeCount;
-        SelectedFootage.Status = SelectedStatus;
-        SelectedFootage.Movie = SelectedMovie;
+        // SelectedFootage.SceneName = SceneName;
+        // SelectedFootage.TimeSpan = TimeSpan;
+        // SelectedFootage.TakeCount = TakeCount;
+        // SelectedFootage.Status = SelectedStatus;
+        // SelectedFootage.Movie = SelectedMovie;
 
         var list = db.Footages.ToList();
 
         var footage = db.Footages.Where(
             e => e.FootageId == SelectedFootage.FootageId)
+            .Include(e => e.Movie)
             .FirstOrDefault();
 
         footage.SceneName = SceneName;
@@ -123,10 +128,10 @@ public class FootageViewModel : ViewModelBase
         db.SaveChanges();
     }
 
-    private async void _removeFootage()
+    private void _removeFootage()
     {
         db.Footages.Remove(SelectedFootage);
-        await db.SaveChangesAsync();
+        db.SaveChanges();
         Footages.RemoveAt(SelectedIdx);
     }
 }

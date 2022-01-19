@@ -65,8 +65,11 @@ public partial class CinemasView : ReactiveUserControl<CinemasViewModel>
 
     private void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        ViewModel.Title = ViewModel.Cinemas[CinemasGrid.SelectedIndex].Title;
-        ViewModel.Address = ViewModel.Cinemas[CinemasGrid.SelectedIndex].Address;
-
+        if (0 <= ViewModel.SelectedCinemaIndex &&
+            ViewModel.SelectedCinemaIndex < ViewModel.Cinemas.Count)
+        {
+            ViewModel.Title = ViewModel.Cinemas[CinemasGrid.SelectedIndex].Title;
+            ViewModel.Address = ViewModel.Cinemas[CinemasGrid.SelectedIndex].Address;
+        }
     }
 }

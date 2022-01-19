@@ -7,14 +7,15 @@ using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using Microsoft.EntityFrameworkCore;
+using System.Reactive.Linq;
 
 namespace FilmStudio.ViewModels;
 
 public class AdViewModel : ViewModelBase
 {
     public ObservableCollection<Ad> Ads { get; set; }
-    public IEnumerable<Movie> Movies { get; set; }
-    public IEnumerable<AdType> AdTypes { get; set; }
+    public ObservableCollection<Movie> Movies { get; set; }
+    public ObservableCollection<AdType> AdTypes { get; set; }
 
     [Reactive] public int SelectedAdIdx { get; set; }
     [Reactive] public int SelectedMovieIdx { get; set; }
@@ -39,8 +40,8 @@ public class AdViewModel : ViewModelBase
             .Include(e => e.Movie)
             .Include(e => e.AdType)
             .ToList());
-        Movies = db.Movies.AsEnumerable();
-        AdTypes = db.AdTypes.AsEnumerable();
+        Movies = new(db.Movies);
+        AdTypes = new(db.AdTypes);
 
         this.ValidationRule(
             vm => vm.Source,
@@ -73,13 +74,16 @@ public class AdViewModel : ViewModelBase
         );
 
         AddAd = ReactiveCommand.Create(_addAd, this.IsValid());
-        UpdateAd = ReactiveCommand.Create(_updateAd, this.IsValid());
+        UpdateAd = ReactiveCommand.Create(_updateAd, Observable.CombineLatest(
+            this.IsValid(), this.WhenAnyValue(x => x.SelectedAdIdx, x => 0 <= x && x < Ads.Count),
+            (x, y) => x && y
+        ));
         RemoveAd = ReactiveCommand.Create(_removeAd, this.WhenAnyValue(
             x => x.SelectedAdIdx, x => 0 <= x && x < Ads.Count
         ));
     }
 
-    private async void _addAd()
+    private void _addAd()
     {
         var ad = new Ad()
         {
@@ -90,15 +94,15 @@ public class AdViewModel : ViewModelBase
             AdType = _castAdTypeFromId
         };
 
-        await db.Ads.AddAsync(ad);
-        await db.SaveChangesAsync();
+        db.Ads.Add(ad);
+        db.SaveChanges();
         Ads.Add(ad);
     }
 
-    private async void _removeAd()
+    private void _removeAd()
     {
         db.Ads.Remove(Ads[SelectedAdIdx]);
-        await db.SaveChangesAsync();
+        db.SaveChanges();
         Ads.RemoveAt(SelectedAdIdx);
     }
 

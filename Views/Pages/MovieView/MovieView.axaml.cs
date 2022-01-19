@@ -80,8 +80,11 @@ public partial class MovieView : ReactiveUserControl<MovieViewModel>
 
     private void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        ViewModel.Title = ViewModel.Movies[MoviesGrid.SelectedIndex].Title;
-        ViewModel.Description = ViewModel.Movies[MoviesGrid.SelectedIndex].Description;
-        ViewModel.ReleaseYear = ViewModel.Movies[MoviesGrid.SelectedIndex].ReleaseYear;
+        if (0 <= ViewModel.SelectedMovieIndex && ViewModel.SelectedMovieIndex < ViewModel.Movies.Count)
+        {
+            ViewModel.Title = ViewModel.Movies[MoviesGrid.SelectedIndex].Title;
+            ViewModel.Description = ViewModel.Movies[MoviesGrid.SelectedIndex].Description;
+            ViewModel.ReleaseYear = ViewModel.Movies[MoviesGrid.SelectedIndex].ReleaseYear;
+        }
     }
 }

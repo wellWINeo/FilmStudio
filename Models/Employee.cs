@@ -21,5 +21,10 @@ public class Employee : INotifyPropertyChanged
     public string PassportNumber { get; set; }
     public string SNILS { get; set; }
     public string INN { get; set; }
-    public virtual ICollection<Movie> Movies { get; set; }
+    public virtual List<Movie> Movies { get; set; }
+
+    public Employee()
+    {
+        Movies = new();
+    }
 }

@@ -36,6 +36,13 @@ public partial class AdView : ReactiveUserControl<AdViewModel>
         InitializeComponent();
         this.WhenActivated(disposables =>
         {
+            this.Bind(ViewModel, vm => vm.SelectedMovieIdx,
+                view => view.MovieComboBox.SelectedIndex)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel, vm => vm.SelectedAdTypeIdx,
+                view => view.AdTypeComboBox.SelectedIndex)
+                .DisposeWith(disposables);
+
             this.Bind(ViewModel, vm => vm.Source, view => view.AdSourceBox.Text)
                 .DisposeWith(disposables);
             this.Bind(ViewModel, vm => vm.Amount, view => view.AdAmountNumeric.Text)
@@ -44,11 +51,11 @@ public partial class AdView : ReactiveUserControl<AdViewModel>
                 view => view.AdTargetAudienceBox.Text).DisposeWith(disposables);
             this.Bind(ViewModel, vm => vm.Movies, view => view.MovieComboBox.Items,
                 vmToViewConverter: value => value,
-                viewToVmConverter: value => value as IEnumerable<Movie>)
+                viewToVmConverter: value => value as ObservableCollection<Movie>)
                 .DisposeWith(disposables);
             this.Bind(ViewModel, vm => vm.AdTypes, view => view.AdTypeComboBox.Items,
                 vmToViewConverter: value => value,
-                viewToVmConverter: value => value as IEnumerable<AdType>)
+                viewToVmConverter: value => value as ObservableCollection<AdType>)
                 .DisposeWith(disposables);
             this.Bind(ViewModel, vm => vm.Ads, view => view.AdsGrid.Items,
                 vmToViewConverter: value => value,
@@ -80,14 +87,22 @@ public partial class AdView : ReactiveUserControl<AdViewModel>
 
     private void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        ViewModel!.Source = ViewModel.Ads[AdsGrid.SelectedIndex].Source;
-        ViewModel.Amount = ViewModel.Ads[AdsGrid.SelectedIndex].Amount;
-        ViewModel.TargetAudience = ViewModel.Ads[AdsGrid.SelectedIndex].TargetAudience;
-        ViewModel.SelectedMovieIdx = ViewModel.Movies.IndexOf(
-            ViewModel.Movies.ElementAt(ViewModel.SelectedMovieIdx)
-        );
-        ViewModel.SelectedAdTypeIdx = ViewModel.AdTypes.IndexOf(
-            ViewModel.AdTypes.ElementAt(ViewModel.SelectedAdTypeIdx)
-        );
+        if (0 <= ViewModel.SelectedAdIdx && ViewModel.SelectedAdIdx < ViewModel.Ads.Count)
+        {
+            ViewModel!.Source = ViewModel.Ads[AdsGrid.SelectedIndex].Source;
+            ViewModel.Amount = ViewModel.Ads[AdsGrid.SelectedIndex].Amount;
+            ViewModel.TargetAudience = ViewModel.Ads[AdsGrid.SelectedIndex].TargetAudience;
+
+            if (0 <= ViewModel.SelectedMovieIdx && ViewModel.SelectedMovieIdx < ViewModel.Movies.Count)
+                ViewModel.SelectedMovieIdx = ViewModel.Movies.IndexOf(
+                    ViewModel.Movies.ElementAt(ViewModel.SelectedMovieIdx)
+                );
+
+            if (0 <= ViewModel.SelectedAdTypeIdx && ViewModel.SelectedAdTypeIdx < ViewModel.AdTypes.Count)
+
+                ViewModel.SelectedAdTypeIdx = ViewModel.AdTypes.IndexOf(
+                    ViewModel.AdTypes.ElementAt(ViewModel.SelectedAdTypeIdx)
+                );
+        }
     }
 }

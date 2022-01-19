@@ -72,7 +72,10 @@ public partial class UserView : ReactiveUserControl<UserViewModel>
 
     private void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        ViewModel.UserName = ViewModel.Users[ViewModel.SelectedIdx].UserName;
-        ViewModel.Password = ViewModel.Users[ViewModel.SelectedIdx].Password;
+        if (0 <= ViewModel.SelectedIdx && ViewModel.SelectedIdx < ViewModel.Users.Count)
+        {
+            ViewModel.UserName = ViewModel.Users[ViewModel.SelectedIdx].UserName;
+            ViewModel.Password = ViewModel.Users[ViewModel.SelectedIdx].Password;
+        }
     }
 }

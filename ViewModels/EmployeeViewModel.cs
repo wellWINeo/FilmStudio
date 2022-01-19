@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using DynamicData;
 using DynamicData.Binding;
+using System.Reactive.Linq;
 
 namespace FilmStudio.ViewModels;
 
@@ -22,10 +23,17 @@ public class EmployeeViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> AddUserCommand { get; }
     public ReactiveCommand<Unit, Unit> UpdateUserCommand { get; }
     public ReactiveCommand<Unit, Unit> DeleteUserCommand { get; }
+    public ReactiveCommand<Unit, Unit> AddMovieToList { get; }
+    public ReactiveCommand<Unit, Unit> RemoveMovieFromList { get; }
 
     public ObservableCollection<Employee> Employees { get; set; }
+    public ObservableCollection<Movie> Movies { get; set; }
+    public ObservableCollection<Movie> WorkingMovies { get; set; } = new();
+
 
     [Reactive] public int EmployeeSelectedIndex { get; set; }
+    [Reactive] public int SelectedMovieIdx { get; set; }
+    [Reactive] public int SelectedWorkingMovieIdx { get; set; }
 
     public IObservable<bool> IsEmployeeSelected { get; set; }
 
@@ -39,12 +47,15 @@ public class EmployeeViewModel : ViewModelBase
     [Reactive] public string SNILS { get; set; } = string.Empty;
     [Reactive] public string INN { get; set; } = string.Empty;
 
+
     public EmployeeViewModel(ApplicationContext _db, IScreen screen) :
         base(_db, screen)
     {
         Employees = new(db.Employees
             .Include(e => e.Movies)
             .ToList());
+
+        Movies = new(db.Movies);
 
         IsEmployeeSelected = this.WhenAnyValue(
             x => x.EmployeeSelectedIndex,
@@ -84,29 +95,38 @@ public class EmployeeViewModel : ViewModelBase
 
         this.ValidationRule(
             vm => vm.PassportNumber,
-            passportNumber => Regex.IsMatch(passportNumber ?? string.Empty, @"\d{4}-\d{6}"),
+            passportNumber => Regex.IsMatch(passportNumber ?? string.Empty, @"^\d{4}-\d{6}$"),
             "Passport number must satisfy format!"
         );
 
         this.ValidationRule(
             vm => vm.SNILS,
-            snils => Regex.IsMatch(snils ?? string.Empty, @"\d{3}-\d{3}-\d{3} \d{2}"),
+            snils => Regex.IsMatch(snils ?? string.Empty, @"^\d{3}-\d{3}-\d{3} \d{2}$"),
             "SNILS number must satisfy format!"
         );
 
         this.ValidationRule(
             vm => vm.INN,
-            inn => Regex.IsMatch(inn ?? string.Empty, @"\d{12}"),
+            inn => Regex.IsMatch(inn ?? string.Empty, @"^\d{12}$"),
             "INN number must satisfy format!"
         );
 
         // init commands
         AddUserCommand = ReactiveCommand.Create(_addUserCommand, this.IsValid());
-        UpdateUserCommand = ReactiveCommand.Create(_updateUserCommand, this.IsValid());
+        UpdateUserCommand = ReactiveCommand.Create(_updateUserCommand, Observable.CombineLatest(
+            this.IsValid(), this.WhenAnyValue(x => x.EmployeeSelectedIndex, x => 0 <= x && x < Employees.Count),
+            (x, y) => x && y
+        ));
         DeleteUserCommand = ReactiveCommand.Create(_deleteUserCommand, IsEmployeeSelected);
+        AddMovieToList = ReactiveCommand.Create(_addMovieToList, this.WhenAnyValue(
+            x => x.SelectedMovieIdx, x => 0 <= x && x < Movies.Count
+        ));
+        RemoveMovieFromList = ReactiveCommand.Create(_removeFromList, this.WhenAnyValue(
+            x => x.SelectedWorkingMovieIdx, x => 0 <= x && x < WorkingMovies?.Count
+        ));
     }
 
-    private async void _addUserCommand()
+    private void _addUserCommand()
     {
         var employee = new Employee
         {
@@ -120,8 +140,8 @@ public class EmployeeViewModel : ViewModelBase
             INN = INN
         };
 
-        await db.Employees.AddAsync(employee);
-        await db.SaveChangesAsync();
+        db.Employees.Add(employee);
+        db.SaveChanges();
         Employees.Add(employee);
     }
 
@@ -144,6 +164,25 @@ public class EmployeeViewModel : ViewModelBase
     {
         db.Employees.Remove(Employees[EmployeeSelectedIndex]);
         Employees.RemoveAt(EmployeeSelectedIndex);
+        db.SaveChanges();
+    }
+
+    private void _addMovieToList()
+    {
+        WorkingMovies.Add(Movies[SelectedMovieIdx]);
+        var employee = db.Employees.Include(e => e.Movies)
+            .First(e => e.EmployeeId ==
+            Employees[EmployeeSelectedIndex].EmployeeId);
+        Employees[EmployeeSelectedIndex].Movies.Add(Movies[SelectedMovieIdx]);
+        employee.Movies.Add(Movies[SelectedMovieIdx]);
+        db.SaveChanges();
+    }
+
+    private void _removeFromList()
+    {
+        WorkingMovies.RemoveAt(SelectedWorkingMovieIdx);
+        var employee = Employees[EmployeeSelectedIndex];
+        employee.Movies.Remove(WorkingMovies[SelectedMovieIdx]);
         db.SaveChanges();
     }
 }

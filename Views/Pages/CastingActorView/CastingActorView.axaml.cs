@@ -74,8 +74,11 @@ public partial class CastingActorView : ReactiveUserControl<CastingActorViewMode
 
     private void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        ViewModel.Name = ViewModel.CastingActors[ViewModel.SelectedIdx].Name;
-        ViewModel.Surname = ViewModel.CastingActors[ViewModel.SelectedIdx].Surname;
-        ViewModel.Patronymic = ViewModel.CastingActors[ViewModel.SelectedIdx].Patronymic;
+        if (0 <= ViewModel.SelectedIdx && ViewModel.SelectedIdx < ViewModel.CastingActors.Count)
+        {
+            ViewModel.Name = ViewModel.CastingActors[ViewModel.SelectedIdx].Name;
+            ViewModel.Surname = ViewModel.CastingActors[ViewModel.SelectedIdx].Surname;
+            ViewModel.Patronymic = ViewModel.CastingActors[ViewModel.SelectedIdx].Patronymic;
+        }
     }
 }

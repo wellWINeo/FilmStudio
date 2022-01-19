@@ -85,14 +85,28 @@
 				</StackPanel>
 
 				<!-- Row #9, for Movies -->
-				<StackPanel Grid.Row="8" Grid.Column="0" Margin="10,10">
-					<ComboBox x:Name="MoviesComboBox"></ComboBox>
+				<!-- <StackPanel Grid.Row="8" Grid.Column="0" Margin="10,10">
+					<ComboBox x:Name="MoviesComboBox">
+						<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="{Binding Title}" />
+								</StackPanel>
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
+					</ComboBox>
 					<Button x:Name="AddMovieButton">Add movie</Button>
 				</StackPanel>
 				<StackPanel Grid.Row="8" Grid.Column="1" Margin="10,10">
-					<ListBox x:Name="MoviesListBox"></ListBox>
+					<ListBox x:Name="MoviesListBox" Items="{Binding #EmployeesGrid.SelectedItem}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Title}" />
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
 					<Button x:Name="DeleteMovieButton">Delete</Button>
-				</StackPanel>
+				</StackPanel> -->
 			</Grid>
 			<StackPanel Orientation="Horizontal">
 				<Button x:Name="AddUserButton">Add</Button>

@@ -95,16 +95,19 @@ public partial class RentAgreementView : ReactiveUserControl<RentAgreementViewMo
 
     private void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        ViewModel.RentStartDate = ViewModel.RentAgreements[ViewModel.SelectedIdx]
-            .RentStartDate;
-        ViewModel.RentEndDate = ViewModel.RentAgreements[ViewModel.SelectedIdx]
-            .RentEndDate;
-        ViewModel.Amount = ViewModel.RentAgreements[ViewModel.SelectedIdx].Amount;
-        ViewModel.SelectedCinemaIdx = ViewModel.Cinemas.IndexOf(
-            ViewModel.Cinemas.ElementAt(ViewModel.SelectedCinemaIdx)
-        );
-        ViewModel.SelectedMovieIdx = ViewModel.Movies.IndexOf(
-            ViewModel.Movies.ElementAt(ViewModel.SelectedMovieIdx)
-        );
+        if (0 <= ViewModel.SelectedIdx && ViewModel.SelectedIdx < ViewModel.RentAgreements.Count)
+        {
+            ViewModel.RentStartDate = ViewModel.RentAgreements[ViewModel.SelectedIdx]
+                .RentStartDate;
+            ViewModel.RentEndDate = ViewModel.RentAgreements[ViewModel.SelectedIdx]
+                .RentEndDate;
+            ViewModel.Amount = ViewModel.RentAgreements[ViewModel.SelectedIdx].Amount;
+            ViewModel.SelectedCinemaIdx = ViewModel.Cinemas.IndexOf(
+                ViewModel.Cinemas.ElementAt(ViewModel.SelectedCinemaIdx)
+            );
+            ViewModel.SelectedMovieIdx = ViewModel.Movies.IndexOf(
+                ViewModel.Movies.ElementAt(ViewModel.SelectedMovieIdx)
+            );
+        }
     }
 }

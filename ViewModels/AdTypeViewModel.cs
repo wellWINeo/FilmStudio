@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Linq;
 using FilmStudio.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -30,35 +31,38 @@ public class AdTypeViewModel : ViewModelBase
         );
 
         AddAdType = ReactiveCommand.Create(_adAdType, this.IsValid());
-        UpdateAdType = ReactiveCommand.Create(_updateAdType, this.IsValid());
+        UpdateAdType = ReactiveCommand.Create(_updateAdType, Observable.CombineLatest(
+            this.IsValid(), this.WhenAnyValue(x => x.SelectedAdIndex, x => 0 <= x && x < AdTypes.Count),
+            (x, y) => x && y
+        ));
         RemoveAdType = ReactiveCommand.Create(_removeAdType, this.WhenAnyValue(
             x => x.SelectedAdIndex, x => 0 <= x && x < AdTypes.Count
         ));
 
     }
 
-    private async void _adAdType()
+    private void _adAdType()
     {
         var adType = new AdType() { Name = Name };
-        await db.AdTypes.AddAsync(adType);
-        await db.SaveChangesAsync();
+        db.AdTypes.Add(adType);
+        db.SaveChanges();
         AdTypes.Add(adType);
     }
 
-    private async void _removeAdType()
+    private void _removeAdType()
     {
         db.AdTypes.Remove(AdTypes[SelectedAdIndex]);
-        await db.SaveChangesAsync();
+        db.SaveChanges();
         AdTypes.RemoveAt(SelectedAdIndex);
     }
 
-    private async void _updateAdType()
+    private void _updateAdType()
     {
         if (SelectedAdIndex >= 0 && AdTypes[SelectedAdIndex].Name != Name)
         {
             AdTypes[SelectedAdIndex].Name = Name;
             db.AdTypes.Update(AdTypes[SelectedAdIndex]);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
         }
     }
 }

@@ -21,7 +21,7 @@
       <rxui:RoutedViewHost x:Name="ViewHost" Router="{Binding Router}">
         <rxui:RoutedViewHost.DefaultContent>
           <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
-              Default content
+              Welcome!
           </TextBlock>
         </rxui:RoutedViewHost.DefaultContent>
       </rxui:RoutedViewHost>

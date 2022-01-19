@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Linq;
 using FilmStudio.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -39,13 +40,16 @@ public class UserViewModel : ViewModelBase
 
 
         AddUser = ReactiveCommand.Create(_addUser, this.IsValid());
-        UpdateUser = ReactiveCommand.Create(_updateUser, this.IsValid());
+        UpdateUser = ReactiveCommand.Create(_updateUser, Observable.CombineLatest(
+            this.IsValid(), this.WhenAnyValue(x => x.SelectedIdx, x => 0 <= x && x < Users.Count),
+            (x, y) => x && y
+        ));
         RemoveUser = ReactiveCommand.Create(_removeUser, this.WhenAnyValue(
             x => x.SelectedIdx, x => 0 <= x && x < Users.Count
         ));
     }
 
-    private async void _addUser()
+    private void _addUser()
     {
         var user = new User()
         {
@@ -53,23 +57,23 @@ public class UserViewModel : ViewModelBase
             Password = Password
         };
 
-        await db.Users.AddAsync(user);
-        await db.SaveChangesAsync();
+        db.Users.Add(user);
+        db.SaveChanges();
         Users.Add(user);
     }
 
-    private async void _removeUser()
+    private void _removeUser()
     {
         db.Users.Remove(Users[SelectedIdx]);
-        await db.SaveChangesAsync();
         Users.RemoveAt(SelectedIdx);
+        db.SaveChanges();
     }
 
-    private async void _updateUser()
+    private void _updateUser()
     {
         Users[SelectedIdx].UserName = UserName;
         Users[SelectedIdx].Password = Password;
         db.Users.Update(Users[SelectedIdx]);
-        await db.SaveChangesAsync();
+        db.SaveChanges();
     }
 }

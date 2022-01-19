@@ -51,5 +51,8 @@ public partial class PositionView : ReactiveUserControl<PositionViewModel>
     }
 
     private void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
-        => ViewModel.Title = ViewModel.Positions[PositionsGrid.SelectedIndex].Title;
+    {
+        if (0 <= ViewModel.SelectedIdx && ViewModel.SelectedIdx < ViewModel.Positions.Count)
+            ViewModel.Title = ViewModel.Positions[PositionsGrid.SelectedIndex].Title;
+    }
 }

@@ -79,6 +79,7 @@ public partial class FilmSetView : ReactiveUserControl<FilmSetViewModel>
 
     private void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        ViewModel!.Location = ViewModel.FilmSets[ViewModel.SelectedIdx].Location;
+        if (0 <= ViewModel.SelectedIdx && ViewModel.SelectedIdx < ViewModel.FilmSets.Count)
+            ViewModel!.Location = ViewModel.FilmSets[ViewModel.SelectedIdx].Location;
     }
 }

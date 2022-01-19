@@ -98,16 +98,19 @@ public partial class FootageView : ReactiveUserControl<FootageViewModel>
 
     private void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        ViewModel.SceneName = ViewModel.Footages[ViewModel.SelectedIdx].SceneName;
-        ViewModel.TimeSpan = ViewModel.Footages[ViewModel.SelectedIdx].TimeSpan;
-        ViewModel.TakeCount = ViewModel.Footages[ViewModel.SelectedIdx].TakeCount;
+        if (0 <= ViewModel.SelectedIdx && ViewModel.SelectedIdx < ViewModel.Footages.Count)
+        {
+            ViewModel.SceneName = ViewModel.Footages[ViewModel.SelectedIdx].SceneName;
+            ViewModel.TimeSpan = ViewModel.Footages[ViewModel.SelectedIdx].TimeSpan;
+            ViewModel.TakeCount = ViewModel.Footages[ViewModel.SelectedIdx].TakeCount;
 
-        // TODO: what the fuck!!!
-        ViewModel.SelectedMovieIdx = ViewModel.Movies.IndexOf(
-            ViewModel.Movies.ElementAt(ViewModel.SelectedMovieIdx)
-        );
-        // ViewModel.SelectedStatusIdx = ViewModel.Statuses.IndexOf(
-        //     ViewModel.Statuses.ElementAt(ViewModel.SelectedStatusIdx)
-        // );
+            // TODO: what the fuck!!!
+            ViewModel.SelectedMovieIdx = ViewModel.Movies.IndexOf(
+                ViewModel.Movies.ElementAt(ViewModel.SelectedMovieIdx)
+            );
+            // ViewModel.SelectedStatusIdx = ViewModel.Statuses.IndexOf(
+            //     ViewModel.Statuses.ElementAt(ViewModel.SelectedStatusIdx)
+            // );
+        }
     }
 }

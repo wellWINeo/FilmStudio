@@ -13,7 +13,7 @@ public class Movie : INotifyPropertyChanged
     public string Description { get; set; }
     public int ReleaseYear { get; set; }
     public MovieStatus Status { get; set; }
-    public virtual ICollection<Employee> Employees { get; set; }
+    public List<Employee> Employees { get; set; } = new();
 
     public event PropertyChangedEventHandler? PropertyChanged;
 }

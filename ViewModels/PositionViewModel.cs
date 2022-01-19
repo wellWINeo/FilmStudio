@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Reactive;
+using System.Reactive.Linq;
 using FilmStudio.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -30,34 +31,37 @@ public class PositionViewModel : ViewModelBase
         );
 
         AddPosition = ReactiveCommand.Create(_addPosition, this.IsValid());
-        UpdatePosition = ReactiveCommand.Create(_updatePosition, this.IsValid());
+        UpdatePosition = ReactiveCommand.Create(_updatePosition, Observable.CombineLatest(
+            this.IsValid(), this.WhenAnyValue(x => x.SelectedIdx, x => 0 <= x && x < Positions.Count),
+            (x, y) => x && y
+        ));
         RemovePosition = ReactiveCommand.Create(_removePosition, this.WhenAnyValue(
             x => x.SelectedIdx, x => 0 <= x && x < Positions.Count
         ));
     }
 
-    private async void _addPosition()
+    private void _addPosition()
     {
         var position = new Position() { Title = Title };
-        await db.Positions.AddAsync(position);
-        await db.SaveChangesAsync();
+        db.Positions.Add(position);
+        db.SaveChanges();
         Positions.Add(position);
     }
 
-    private async void _removePosition()
+    private void _removePosition()
     {
         db.Positions.Remove(Positions[SelectedIdx]);
-        await db.SaveChangesAsync();
+        db.SaveChanges();
         Positions.RemoveAt(SelectedIdx);
     }
 
-    private async void _updatePosition()
+    private void _updatePosition()
     {
         if (SelectedIdx >= 0 && Positions[SelectedIdx].Title != Title)
         {
             Positions[SelectedIdx].Title = Title;
             db.Positions.Update(Positions[SelectedIdx]);
-            await db.SaveChangesAsync();
+            db.SaveChanges();
         }
     }
 }

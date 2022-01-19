@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using FilmStudio.Models;
 using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
@@ -78,13 +79,16 @@ public class RentAgreementViewModel : ViewModelBase
         );
 
         AddRentAgreement = ReactiveCommand.Create(_addRentAgreement, this.IsValid());
-        UpdateRentAgreement = ReactiveCommand.Create(_updateRentAgreement, this.IsValid());
+        UpdateRentAgreement = ReactiveCommand.Create(_updateRentAgreement, Observable.CombineLatest(
+            this.IsValid(), this.WhenAnyValue(x => x.SelectedIdx, x => 0 <= x && x < RentAgreements.Count),
+            (x, y) => x && y
+        ));
         RemoveRentAgreement = ReactiveCommand.Create(_removeRentAgreement, this.WhenAnyValue(
             x => x.SelectedIdx, x => 0 <= x && x < RentAgreements.Count
         ));
     }
 
-    private async void _addRentAgreement()
+    private void _addRentAgreement()
     {
         var rentAgreement = new RentAgreement()
         {
@@ -95,19 +99,19 @@ public class RentAgreementViewModel : ViewModelBase
             Movie = SelectedMovie
         };
 
-        await db.RentAgreements.AddAsync(rentAgreement);
-        await db.SaveChangesAsync();
+        db.RentAgreements.Add(rentAgreement);
+        db.SaveChanges();
         RentAgreements.Add(rentAgreement);
     }
 
-    private async void _removeRentAgreement()
+    private void _removeRentAgreement()
     {
         db.RentAgreements.Remove(RentAgreements[SelectedIdx]);
-        await db.SaveChangesAsync();
+        db.SaveChanges();
         RentAgreements.RemoveAt(SelectedIdx);
     }
 
-    private async void _updateRentAgreement()
+    private void _updateRentAgreement()
     {
         RentAgreements[SelectedIdx].RentStartDate = _getDateTimeFromOffset(RentStartDate);
         RentAgreements[SelectedIdx].RentEndDate = _getDateTimeFromOffset(RentEndDate);
@@ -116,7 +120,7 @@ public class RentAgreementViewModel : ViewModelBase
         RentAgreements[SelectedIdx].Movie = SelectedMovie;
 
         db.RentAgreements.Update(RentAgreements[SelectedIdx]);
-        await db.SaveChangesAsync();
+        db.SaveChanges();
     }
 
     private DateTime _getDateTimeFromOffset(DateTimeOffset? value)

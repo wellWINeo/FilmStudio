@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using FilmStudio.Models;
 using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
@@ -70,14 +71,17 @@ public class CastingListViewModel : ViewModelBase
         );
 
         AddToCastingList = ReactiveCommand.Create(_addToCastingList, this.IsValid());
-        UpdateInCastingList = ReactiveCommand.Create(_updateInCastingList, this.IsValid());
+        UpdateInCastingList = ReactiveCommand.Create(_updateInCastingList, Observable.CombineLatest(
+            this.IsValid(), this.WhenAnyValue(x => x.SelectedIdx, x => 0 <= x && x < CastingLists.Count),
+            (x, y) => x && y
+        ));
         RemoveFromCastingList = ReactiveCommand.Create(_removeFromCastingList, this.WhenAnyValue(
             x => x.SelectedIdx, x => 0 <= x && x < CastingLists.Count
         ));
 
     }
 
-    private async void _addToCastingList()
+    private void _addToCastingList()
     {
         var casting = new CastingList()
         {
@@ -87,19 +91,19 @@ public class CastingListViewModel : ViewModelBase
             CastingActor = SelectedCastingActor
         };
 
-        await db.CastingLists.AddAsync(casting);
-        await db.SaveChangesAsync();
+        db.CastingLists.Add(casting);
+        db.SaveChanges();
         CastingLists.Add(casting);
     }
 
-    private async void _removeFromCastingList()
+    private void _removeFromCastingList()
     {
         db.CastingLists.Remove(SelectedCastingList);
-        await db.SaveChangesAsync();
+        db.SaveChanges();
         CastingLists.RemoveAt(SelectedIdx);
     }
 
-    private async void _updateInCastingList()
+    private void _updateInCastingList()
     {
         SelectedCastingList.Role = Role;
         SelectedCastingList.Datetime = _getDateTimeFromOffset(AtDateTime);
@@ -107,7 +111,7 @@ public class CastingListViewModel : ViewModelBase
         SelectedCastingList.CastingActor = SelectedCastingActor;
 
         db.CastingLists.Update(SelectedCastingList);
-        await db.SaveChangesAsync();
+        db.SaveChanges();
     }
 
     private DateTime _getDateTimeFromOffset(DateTimeOffset? offset)

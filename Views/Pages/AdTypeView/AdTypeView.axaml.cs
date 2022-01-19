@@ -22,6 +22,8 @@ public partial class AdTypeView : ReactiveUserControl<AdTypeViewModel>
         InitializeComponent();
         this.WhenActivated(disposables =>
         {
+            this.Bind(ViewModel, vm => vm.SelectedAdIndex, view => view.AdTypeGrid.SelectedIndex)
+                .DisposeWith(disposables);
             this.Bind(ViewModel, vm => vm.AdTypes, view => view.AdTypeGrid.Items,
                 vmToViewConverter: value => value,
                 viewToVmConverter: value => value as ObservableCollection<AdType>)
@@ -45,7 +47,8 @@ public partial class AdTypeView : ReactiveUserControl<AdTypeViewModel>
 
     private void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        ViewModel.Name = ViewModel.AdTypes[AdTypeGrid.SelectedIndex].Name;
+        if (0 <= AdTypeGrid.SelectedIndex && AdTypeGrid.SelectedIndex < ViewModel.AdTypes.Count)
+            ViewModel.Name = ViewModel.AdTypes[AdTypeGrid.SelectedIndex].Name;
     }
 
 }

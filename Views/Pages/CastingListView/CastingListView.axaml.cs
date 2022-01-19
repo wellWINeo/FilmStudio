@@ -85,14 +85,17 @@ public partial class CastingListView : ReactiveUserControl<CastingListViewModel>
 
     private void OnGridSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        ViewModel.Role = ViewModel.CastingLists[ViewModel.SelectedIdx].Role;
-        ViewModel.AtDateTime = ViewModel.CastingLists[ViewModel.SelectedIdx].Datetime;
-        // TODO: wtf is it ?!
-        ViewModel.SelectedActorIdx = ViewModel.CastingActors.IndexOf(
-            ViewModel.CastingActors.ElementAt(ViewModel.SelectedActorIdx)
-        );
-        ViewModel.SelectedMovieIdx = ViewModel.Movies.IndexOf(
-            ViewModel.Movies.ElementAt(ViewModel.SelectedMovieIdx)
-        );
+        if (0 <= ViewModel.SelectedIdx && ViewModel.SelectedIdx < ViewModel.CastingLists.Count)
+        {
+            ViewModel.Role = ViewModel.CastingLists[ViewModel.SelectedIdx].Role;
+            ViewModel.AtDateTime = ViewModel.CastingLists[ViewModel.SelectedIdx].Datetime;
+            // TODO: wtf is it ?!
+            ViewModel.SelectedActorIdx = ViewModel.CastingActors.IndexOf(
+                ViewModel.CastingActors.ElementAt(ViewModel.SelectedActorIdx)
+            );
+            ViewModel.SelectedMovieIdx = ViewModel.Movies.IndexOf(
+                ViewModel.Movies.ElementAt(ViewModel.SelectedMovieIdx)
+            );
+        }
     }
 }
