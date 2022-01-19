@@ -8,8 +8,8 @@
     <local:LoginView x:Name="LocalLoginView" DataContext="{Binding loginViewModel}" />
     <StackPanel x:Name="MainPanel">
       <StackPanel Orientation="Horizontal">
-        <TextBlock Margin="5,0">Subsystem:</TextBlock>
-        <ComboBox x:Name="SubsystemList" SelectedIndex="0">
+        <TextBlock Margin="5,0" VerticalAlignment="Center" FontSize="15">Subsystem:</TextBlock>
+        <ComboBox x:Name="SubsystemList" SelectedIndex="0" Margin="15,15">
           <ComboBox.ItemTemplate>
             <DataTemplate>
               <TextBlock Text="{Binding}" />
@@ -20,7 +20,7 @@
       </StackPanel>
       <rxui:RoutedViewHost x:Name="ViewHost" Router="{Binding Router}">
         <rxui:RoutedViewHost.DefaultContent>
-          <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+          <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="21" FontWeight="Bold">
               Welcome!
           </TextBlock>
         </rxui:RoutedViewHost.DefaultContent>
