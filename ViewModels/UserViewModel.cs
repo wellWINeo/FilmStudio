@@ -10,18 +10,21 @@ namespace FilmStudio.ViewModels;
 
 public class UserViewModel : ViewModelBase
 {
+    // all users
     public ObservableCollection<User> Users { get; set; }
 
     [Reactive] public int SelectedIdx { get; set; }
 
+    // user's attributes
     [Reactive] public string UserName { get; set; }
     [Reactive] public string Password { get; set; }
 
+    // commands
     public ReactiveCommand<Unit, Unit> AddUser { get; }
     public ReactiveCommand<Unit, Unit> UpdateUser { get; }
     public ReactiveCommand<Unit, Unit> RemoveUser { get; }
 
-    public UserViewModel(ApplicationContext _db, IScreen screen) : base(_db, screen)
+    public UserViewModel(IScreen screen) : base(screen)
     {
         Users = new(db.Users);
 
@@ -39,13 +42,16 @@ public class UserViewModel : ViewModelBase
         );
 
 
+        // init commands
         AddUser = ReactiveCommand.Create(_addUser, this.IsValid());
         UpdateUser = ReactiveCommand.Create(_updateUser, Observable.CombineLatest(
             this.IsValid(), this.WhenAnyValue(x => x.SelectedIdx, x => 0 <= x && x < Users.Count),
             (x, y) => x && y
+        // check is data valid & any user selected in grid for update
         ));
         RemoveUser = ReactiveCommand.Create(_removeUser, this.WhenAnyValue(
             x => x.SelectedIdx, x => 0 <= x && x < Users.Count
+        // is index valid
         ));
     }
 

@@ -1,6 +1,8 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using FilmStudio.Models;
+using Splat;
+using Microsoft.Extensions.Configuration;
 
 namespace FilmStudio;
 
@@ -21,7 +23,10 @@ public class ApplicationContext : DbContext
     public DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlServer("Server=127.0.0.1;Initial Catalog=FilmStudio;User ID=SA;Password=MyVeryStrongPassword123!;Trusted_Connection=False;MultipleActiveResultSets=true");
+        => options.UseSqlServer(
+            Locator.Current.GetService<IConfigurationRoot>()
+            .GetConnectionString("SQL_Server")
+        );
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

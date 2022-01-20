@@ -1,9 +1,12 @@
 ﻿using System;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.ReactiveUI;
 using FilmStudio.ViewModels;
 using FilmStudio.Views;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using ReactiveUI;
 using Splat;
 
@@ -21,7 +24,7 @@ class Program
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
     {
-        // locator registration
+        // view & viewmodel registration in locator
         Locator.CurrentMutable.Register(() => new EmployeeView(),
             typeof(IViewFor<EmployeeViewModel>));
 
@@ -63,6 +66,20 @@ class Program
 
         Locator.CurrentMutable.Register(() => new PropsView(),
             typeof(IViewFor<PropsViewModel>));
+
+
+        var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", false);
+
+        // register config
+        Locator.CurrentMutable.RegisterConstant(builder.Build(), typeof(IConfigurationRoot));
+
+        // register ef context
+        Locator.CurrentMutable.RegisterLazySingleton(
+            () => new ApplicationContext(),
+            typeof(ApplicationContext)
+        );
 
 
         // build app

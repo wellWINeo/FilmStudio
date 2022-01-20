@@ -5,22 +5,25 @@ using FilmStudio.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
+using Splat;
 
 namespace FilmStudio.ViewModels;
 
 public class AdTypeViewModel : ViewModelBase
 {
+    // all types of ad
     public ObservableCollection<AdType> AdTypes { get; set; }
 
     [Reactive] public int SelectedAdIndex { get; set; } = 0;
     [Reactive] public string Name { get; set; } = string.Empty;
 
+    // commands
     public ReactiveCommand<Unit, Unit> AddAdType { get; }
     public ReactiveCommand<Unit, Unit> RemoveAdType { get; }
     public ReactiveCommand<Unit, Unit> UpdateAdType { get; }
 
 
-    public AdTypeViewModel(ApplicationContext _db, IScreen screen) : base(_db, screen)
+    public AdTypeViewModel(IScreen screen) : base(screen)
     {
         AdTypes = new(db.AdTypes);
 

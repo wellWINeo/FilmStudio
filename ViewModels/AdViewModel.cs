@@ -8,23 +8,28 @@ using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System.Reactive.Linq;
+using Splat;
 
 namespace FilmStudio.ViewModels;
 
 public class AdViewModel : ViewModelBase
 {
+    // sources
     public ObservableCollection<Ad> Ads { get; set; }
     public ObservableCollection<Movie> Movies { get; set; }
     public ObservableCollection<AdType> AdTypes { get; set; }
 
+    // indexes
     [Reactive] public int SelectedAdIdx { get; set; }
     [Reactive] public int SelectedMovieIdx { get; set; }
     [Reactive] public int SelectedAdTypeIdx { get; set; }
 
+    // attributes
     [Reactive] public string Source { get; set; } = string.Empty;
     [Reactive] public decimal Amount { get; set; } = 0.0M;
     [Reactive] public string TargetAudience { get; set; } = string.Empty;
 
+    // comands
     public ReactiveCommand<Unit, Unit> AddAd { get; set; }
     public ReactiveCommand<Unit, Unit> RemoveAd { get; set; }
     public ReactiveCommand<Unit, Unit> UpdateAd { get; set; }
@@ -34,15 +39,18 @@ public class AdViewModel : ViewModelBase
     private AdType _castAdTypeFromId
         => AdTypes.ElementAt(SelectedAdTypeIdx);
 
-    public AdViewModel(ApplicationContext _db, IScreen screen) : base(_db, screen)
+    public AdViewModel(IScreen screen) : base(screen)
     {
+        // select ads with eager loading
         Ads = new(db.Ads
             .Include(e => e.Movie)
             .Include(e => e.AdType)
             .ToList());
+        // all movies & ad types
         Movies = new(db.Movies);
         AdTypes = new(db.AdTypes);
 
+        // validation
         this.ValidationRule(
             vm => vm.Source,
             value => !string.IsNullOrEmpty(value),
@@ -73,6 +81,7 @@ public class AdViewModel : ViewModelBase
             "Choose ad type!"
         );
 
+        // init commands
         AddAd = ReactiveCommand.Create(_addAd, this.IsValid());
         UpdateAd = ReactiveCommand.Create(_updateAd, Observable.CombineLatest(
             this.IsValid(), this.WhenAnyValue(x => x.SelectedAdIdx, x => 0 <= x && x < Ads.Count),
@@ -106,7 +115,6 @@ public class AdViewModel : ViewModelBase
         Ads.RemoveAt(SelectedAdIdx);
     }
 
-    // FIXME: multiple updates cause exception
     private void _updateAd()
     {
         Ads[SelectedAdIdx].Source = Source;

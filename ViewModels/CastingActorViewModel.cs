@@ -6,6 +6,7 @@ using FilmStudio.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
+using Splat;
 
 namespace FilmStudio.ViewModels;
 
@@ -15,19 +16,21 @@ public class CastingActorViewModel : ViewModelBase
 
     [Reactive] public int SelectedIdx { get; set; }
 
+    // attributes
     [Reactive] public string Name { get; set; } = string.Empty;
     [Reactive] public string Surname { get; set; } = string.Empty;
     [Reactive] public string Patronymic { get; set; } = "-";
 
+    // commands
     public ReactiveCommand<Unit, Unit> AddCastingActor { get; }
     public ReactiveCommand<Unit, Unit> UpdateCastingActor { get; }
     public ReactiveCommand<Unit, Unit> DeleteCastingActor { get; }
 
-
-    public CastingActorViewModel(ApplicationContext _db, IScreen screen) : base(_db, screen)
+    public CastingActorViewModel(IScreen screen) : base(screen)
     {
         CastingActors = new(db.CastingActors);
 
+        // validation
         this.ValidationRule(
             vm => vm.Name,
             value => !string.IsNullOrWhiteSpace(value),
@@ -45,6 +48,7 @@ public class CastingActorViewModel : ViewModelBase
             "-"
         );
 
+        // init commands
         AddCastingActor = ReactiveCommand.Create(_addCastingActor, this.IsValid());
         UpdateCastingActor = ReactiveCommand.Create(_updateRentAgreement, Observable.CombineLatest(
             this.IsValid(), this.WhenAnyValue(x => x.SelectedIdx, x => 0 <= x && x < CastingActors.Count),

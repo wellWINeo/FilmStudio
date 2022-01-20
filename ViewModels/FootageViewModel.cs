@@ -37,8 +37,9 @@ public class FootageViewModel : ViewModelBase
         => (FootageStatus)Statuses.GetValue(SelectedStatusIdx)!;
     private Footage SelectedFootage => Footages[SelectedIdx];
 
-    public FootageViewModel(ApplicationContext _db, IScreen screen) : base(_db, screen)
+    public FootageViewModel(IScreen screen) : base(screen)
     {
+        // loading footages
         Footages = new(
             db.Footages
                 .Include(e => e.Movie)
@@ -78,13 +79,14 @@ public class FootageViewModel : ViewModelBase
             "Choose status!"
         );
 
+        // init commands
         AddFootage = ReactiveCommand.Create(_addFootage, this.IsValid());
         UpdateFootage = ReactiveCommand.Create(_updateFootage, Observable.CombineLatest(
             this.IsValid(), this.WhenAnyValue(x => x.SelectedIdx, x => 0 <= x && x < Footages.Count),
             (x, y) => x && y
         ));
         RemoveFootage = ReactiveCommand.Create(_removeFootage, this.WhenAnyValue(
-            x => x.SelectedIdx, x => 0 <= x && x < Footages.Count
+            x => x.SelectedIdx, x => 0 <= x && x < Footages.Count // is index valid
         ));
     }
 
@@ -106,14 +108,8 @@ public class FootageViewModel : ViewModelBase
 
     private void _updateFootage()
     {
-        // SelectedFootage.SceneName = SceneName;
-        // SelectedFootage.TimeSpan = TimeSpan;
-        // SelectedFootage.TakeCount = TakeCount;
-        // SelectedFootage.Status = SelectedStatus;
-        // SelectedFootage.Movie = SelectedMovie;
-
-        var list = db.Footages.ToList();
-
+        // for debug
+        // var list = db.Footages.ToList();
         var footage = db.Footages.Where(
             e => e.FootageId == SelectedFootage.FootageId)
             .Include(e => e.Movie)

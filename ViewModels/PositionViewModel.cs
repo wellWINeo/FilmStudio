@@ -12,14 +12,16 @@ public class PositionViewModel : ViewModelBase
 {
     public ObservableCollection<Position> Positions { get; set; }
 
+    // attributes
     [Reactive] public int SelectedIdx { get; set; }
     [Reactive] public string Title { get; set; } = string.Empty;
 
+    // commands
     public ReactiveCommand<Unit, Unit> AddPosition { get; }
     public ReactiveCommand<Unit, Unit> UpdatePosition { get; }
     public ReactiveCommand<Unit, Unit> RemovePosition { get; }
 
-    public PositionViewModel(ApplicationContext _db, IScreen screen) : base(_db, screen)
+    public PositionViewModel(IScreen screen) : base(screen)
     {
         Positions = new(db.Positions);
 
@@ -30,6 +32,7 @@ public class PositionViewModel : ViewModelBase
             "Title can't be empty"
         );
 
+        // init commands
         AddPosition = ReactiveCommand.Create(_addPosition, this.IsValid());
         UpdatePosition = ReactiveCommand.Create(_updatePosition, Observable.CombineLatest(
             this.IsValid(), this.WhenAnyValue(x => x.SelectedIdx, x => 0 <= x && x < Positions.Count),

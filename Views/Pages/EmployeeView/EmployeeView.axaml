@@ -85,7 +85,7 @@
 				</StackPanel>
 
 				<!-- Row #9, for Movies -->
-				<!-- <StackPanel Grid.Row="8" Grid.Column="0" Margin="10,10">
+				<StackPanel Grid.Row="8" Grid.Column="0" Margin="10,10">
 					<ComboBox x:Name="MoviesComboBox">
 						<ComboBox.ItemTemplate>
 							<DataTemplate>
@@ -98,7 +98,7 @@
 					<Button x:Name="AddMovieButton">Add movie</Button>
 				</StackPanel>
 				<StackPanel Grid.Row="8" Grid.Column="1" Margin="10,10">
-					<ListBox x:Name="MoviesListBox" Items="{Binding #EmployeesGrid.SelectedItem}">
+					<ListBox x:Name="MoviesListBox">
 						<ListBox.ItemTemplate>
 							<DataTemplate>
 								<TextBlock Text="{Binding Title}" />
@@ -106,7 +106,7 @@
 						</ListBox.ItemTemplate>
 					</ListBox>
 					<Button x:Name="DeleteMovieButton">Delete</Button>
-				</StackPanel> -->
+				</StackPanel>
 			</Grid>
 			<StackPanel Orientation="Horizontal">
 				<Button x:Name="AddUserButton">Add</Button>

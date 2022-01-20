@@ -42,10 +42,10 @@ public partial class EmployeeView : ReactiveUserControl<EmployeeViewModel>
                 .DisposeWith(disposables);
             this.BindCommand(ViewModel, vm => vm.DeleteUserCommand, view => view.DeleteButton)
                 .DisposeWith(disposables);
-            // this.BindCommand(ViewModel, vm => vm.AddMovieToList, view => view.AddMovieButton)
-            //     .DisposeWith(disposables);
-            // this.BindCommand(ViewModel, vm => vm.RemoveMovieFromList, view => view.DeleteMovieButton)
-            //     .DisposeWith(disposables);
+            this.BindCommand(ViewModel, vm => vm.AddMovieToList, view => view.AddMovieButton)
+                .DisposeWith(disposables);
+            this.BindCommand(ViewModel, vm => vm.RemoveMovieFromList, view => view.DeleteMovieButton)
+                .DisposeWith(disposables);
 
 
             /* 
@@ -55,17 +55,15 @@ public partial class EmployeeView : ReactiveUserControl<EmployeeViewModel>
                 vmToViewConverter: value => value,
                 viewToVmConverter: value => value as ObservableCollection<Employee>)
                 .DisposeWith(disposables);
-            // this.Bind(ViewModel, vm => vm.Movies, view => view.MoviesComboBox.Items,
-            //     vmToViewConverter: value => value,
-            //     viewToVmConverter: value => value as ObservableCollection<Movie>)
-            //     .DisposeWith(disposables);
-            // this.Bind(ViewModel, vm => vm.WorkingMovies, view => view.MoviesListBox.Items,
-            //     vmToViewConverter: value => value,
-            //     viewToVmConverter: value => value as ObservableCollection<Movie>)
-            //     .DisposeWith(disposables);
+            this.Bind(ViewModel, vm => vm.Movies, view => view.MoviesComboBox.Items,
+                vmToViewConverter: value => value,
+                viewToVmConverter: value => value as ObservableCollection<Movie>)
+                .DisposeWith(disposables);
+            this.Bind(ViewModel, vm => vm.WorkingMovies, view => view.MoviesListBox.Items,
+                vmToViewConverter: value => value,
+                viewToVmConverter: value => value as ObservableCollection<Movie>)
+                .DisposeWith(disposables);
 
-            // this.Bind(ViewModel, vm => vm.Employees, view => view.EmployeesGrid.Items)
-            //     .DisposeWith(disposables);
             this.Bind(ViewModel, vm => vm.EmployeeSelectedIndex, view => view.EmployeesGrid.SelectedIndex)
             .DisposeWith(disposables);
 
@@ -127,12 +125,14 @@ public partial class EmployeeView : ReactiveUserControl<EmployeeViewModel>
             ViewModel.PassportNumber = ViewModel.Employees[EmployeesGrid.SelectedIndex].PassportNumber;
             ViewModel.SNILS = ViewModel.Employees[EmployeesGrid.SelectedIndex].SNILS;
             ViewModel.INN = ViewModel.Employees[EmployeesGrid.SelectedIndex].INN;
-            // if (ViewModel.Employees[EmployeesGrid.SelectedIndex].Movies != null)
-            //     ViewModel.WorkingMovies = new(ViewModel.Employees[EmployeesGrid.SelectedIndex].Movies);
+            if (ViewModel.Employees[EmployeesGrid.SelectedIndex].Movies != null)
+                ViewModel.WorkingMovies = new(ViewModel.Employees[EmployeesGrid.SelectedIndex].Movies);
 
             // ViewModel.WorkingMovies = new()
             // {
-            //     new() { Title = "Hey" }
+            //     new() { Title = "111" },
+            //     new() { Title = "222" },
+            //     new() { Title = "333" },
             // };
         }
     }

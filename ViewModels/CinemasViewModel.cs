@@ -6,27 +6,35 @@ using FilmStudio.Models;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
+using Splat;
 
 namespace FilmStudio.ViewModels;
 
 public class CinemasViewModel : ViewModelBase
 {
+    // all cinemas from db
     public ObservableCollection<Cinema> Cinemas { get; set; }
 
+    // index of selected cinema
     [Reactive] public int SelectedCinemaIndex { get; set; }
 
+    // entity attributes
     [Reactive] public string Title { get; set; } = string.Empty;
     [Reactive] public string Address { get; set; } = string.Empty;
 
+    // commands
     public ReactiveCommand<Unit, Unit> AddCinema { get; set; }
     public ReactiveCommand<Unit, Unit> UpdateCinema { get; set; }
     public ReactiveCommand<Unit, Unit> RemoveCinema { get; set; }
 
-
-    public CinemasViewModel(ApplicationContext _db, IScreen screen) :
-        base(_db, screen)
+    // ctor
+    public CinemasViewModel(IScreen screen) :
+        base(screen)
     {
+        // select cinemas 
         Cinemas = new(db.Cinemas);
+
+        // init commands
         AddCinema = ReactiveCommand.Create(_addCinema, this.IsValid());
         UpdateCinema = ReactiveCommand.Create(_updateCinema, Observable.CombineLatest(
             this.IsValid(), this.WhenAnyValue(x => x.SelectedCinemaIndex, x => 0 <= x && x < Cinemas.Count),
@@ -36,6 +44,7 @@ public class CinemasViewModel : ViewModelBase
             x => x.SelectedCinemaIndex, x => 0 <= x && x < Cinemas.Count
         ));
 
+        // validation
         this.ValidationRule(
             vm => vm.Title,
             title => !string.IsNullOrWhiteSpace(title),
@@ -49,6 +58,7 @@ public class CinemasViewModel : ViewModelBase
         );
     }
 
+    // create & insert to database
     private void _addCinema()
     {
         var cinema = new Cinema()
@@ -61,6 +71,7 @@ public class CinemasViewModel : ViewModelBase
         Cinemas.Add(cinema);
     }
 
+    // update cinema, currently selected in grid
     private void _updateCinema()
     {
         Cinemas[SelectedCinemaIndex].Title = Title;
@@ -69,6 +80,7 @@ public class CinemasViewModel : ViewModelBase
         db.SaveChanges();
     }
 
+    // remove selected cinema
     private void _removeCinema()
     {
         db.Cinemas.Remove(Cinemas[SelectedCinemaIndex]);

@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using DynamicData;
 using DynamicData.Binding;
 using System.Reactive.Linq;
+using Splat;
 
 namespace FilmStudio.ViewModels;
 
@@ -26,18 +27,19 @@ public class EmployeeViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> AddMovieToList { get; }
     public ReactiveCommand<Unit, Unit> RemoveMovieFromList { get; }
 
+    // sources
     public ObservableCollection<Employee> Employees { get; set; }
     public ObservableCollection<Movie> Movies { get; set; }
-    public ObservableCollection<Movie> WorkingMovies { get; set; } = new();
+    [Reactive] public ObservableCollection<Movie> WorkingMovies { get; set; } = new();
 
-
+    // indexes
     [Reactive] public int EmployeeSelectedIndex { get; set; }
     [Reactive] public int SelectedMovieIdx { get; set; }
     [Reactive] public int SelectedWorkingMovieIdx { get; set; }
 
     public IObservable<bool> IsEmployeeSelected { get; set; }
 
-    // protperties for Employee model
+    // properties for Employee model
     [Reactive] public string Name { get; set; } = string.Empty;
     [Reactive] public string Surname { get; set; } = string.Empty;
     [Reactive] public string Patronymic { get; set; } = "-";
@@ -48,15 +50,26 @@ public class EmployeeViewModel : ViewModelBase
     [Reactive] public string INN { get; set; } = string.Empty;
 
 
-    public EmployeeViewModel(ApplicationContext _db, IScreen screen) :
-        base(_db, screen)
+    public EmployeeViewModel(IScreen screen) :
+        base(screen)
     {
+        // select employee with eager loading of movies
         Employees = new(db.Employees
             .Include(e => e.Movies)
             .ToList());
 
+        // all movies
         Movies = new(db.Movies);
 
+        // TODO: test data
+        WorkingMovies = new()
+        {
+            new() { Title = "AAA" },
+            new() { Title = "BBB" },
+            new() { Title = "CCC" },
+        };
+
+        // observable for valid selected index
         IsEmployeeSelected = this.WhenAnyValue(
             x => x.EmployeeSelectedIndex,
             idx => 0 <= idx && idx < Employees.Count
@@ -137,7 +150,8 @@ public class EmployeeViewModel : ViewModelBase
             PassportNumber = PassportNumber,
             BirthDate = ((DateTimeOffset)BirthDate).DateTime,
             SNILS = SNILS,
-            INN = INN
+            INN = INN,
+            Movies = WorkingMovies.ToList()
         };
 
         db.Employees.Add(employee);
@@ -155,6 +169,7 @@ public class EmployeeViewModel : ViewModelBase
         Employees[EmployeeSelectedIndex].BirthDate = ((DateTimeOffset)BirthDate).DateTime;
         Employees[EmployeeSelectedIndex].SNILS = SNILS;
         Employees[EmployeeSelectedIndex].INN = INN;
+        Employees[EmployeeSelectedIndex].Movies = WorkingMovies.ToList();
 
         db.Employees.Update(Employees[EmployeeSelectedIndex]);
         db.SaveChanges();
@@ -176,6 +191,8 @@ public class EmployeeViewModel : ViewModelBase
         Employees[EmployeeSelectedIndex].Movies.Add(Movies[SelectedMovieIdx]);
         employee.Movies.Add(Movies[SelectedMovieIdx]);
         db.SaveChanges();
+
+        // WorkingMovies.Add(new() { Title = "DDD" });
     }
 
     private void _removeFromList()

@@ -26,7 +26,7 @@ public class MainWindowViewModel : ReactiveObject, IScreen
     public MainWindowViewModel()
     {
         db = new();
-        loginViewModel = new(db, this);
+        loginViewModel = new(this);
         ChangeView = ReactiveCommand.CreateFromObservable(_changeView, this.WhenAnyValue(
             x => x.CurrentIndex,
             x => 0 <= x && x < ListOfSubsystems.Length
@@ -38,59 +38,59 @@ public class MainWindowViewModel : ReactiveObject, IScreen
         => ListOfSubsystems.GetValue(CurrentIndex) switch
         {
             Subsystem.Employees => Router.Navigate.Execute(
-                new EmployeeViewModel(db, this)
+                new EmployeeViewModel(this)
             ),
 
             Subsystem.CastingList => Router.Navigate.Execute(
-                new CastingListViewModel(db, this)
+                new CastingListViewModel(this)
             ),
 
             Subsystem.FilmSets => Router.Navigate.Execute(
-                new FilmSetViewModel(db, this)
+                new FilmSetViewModel(this)
             ),
 
             Subsystem.Footages => Router.Navigate.Execute(
-                new FootageViewModel(db, this)
+                new FootageViewModel(this)
             ),
 
             Subsystem.Movies => Router.Navigate.Execute(
-                new MovieViewModel(db, this)
+                new MovieViewModel(this)
             ),
 
             Subsystem.Cinemas => Router.Navigate.Execute(
-                new CinemasViewModel(db, this)
+                new CinemasViewModel(this)
             ),
 
             Subsystem.Ad => Router.Navigate.Execute(
-                new AdViewModel(db, this)
+                new AdViewModel(this)
             ),
 
             Subsystem.AdType => Router.Navigate.Execute(
-                new AdTypeViewModel(db, this)
+                new AdTypeViewModel(this)
             ),
 
             Subsystem.RentAgreement => Router.Navigate.Execute(
-                new RentAgreementViewModel(db, this)
+                new RentAgreementViewModel(this)
             ),
 
             Subsystem.CastingActor => Router.Navigate.Execute(
-                new CastingActorViewModel(db, this)
+                new CastingActorViewModel(this)
             ),
 
             Subsystem.Position => Router.Navigate.Execute(
-                new PositionViewModel(db, this)
+                new PositionViewModel(this)
             ),
 
             Subsystem.Users => Router.Navigate.Execute(
-                new UserViewModel(db, this)
+                new UserViewModel(this)
             ),
 
             Subsystem.Props => Router.Navigate.Execute(
-                new PropsViewModel(db, this)
+                new PropsViewModel(this)
             ),
 
             _ => Router.Navigate.Execute(
-                new ViewModelBase(db, this)
+                new ViewModelBase(this)
             ),
         };
 }

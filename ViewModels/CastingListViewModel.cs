@@ -8,22 +8,27 @@ using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using ReactiveUI.Validation.Extensions;
+using Splat;
 
 namespace FilmStudio.ViewModels;
 
 public class CastingListViewModel : ViewModelBase
 {
+    // sources
     public ObservableCollection<CastingList> CastingLists { get; set; }
     public ObservableCollection<Movie> Movies { get; set; }
     public ObservableCollection<CastingActor> CastingActors { get; set; }
 
+    // attributes
     [Reactive] public string Role { get; set; }
     [Reactive] public DateTimeOffset? AtDateTime { get; set; } = DateTimeOffset.Now;
 
+    // indexes
     [Reactive] public int SelectedMovieIdx { get; set; }
     [Reactive] public int SelectedActorIdx { get; set; }
     [Reactive] public int SelectedIdx { get; set; }
 
+    // commands
     public ReactiveCommand<Unit, Unit> AddToCastingList { get; }
     public ReactiveCommand<Unit, Unit> UpdateInCastingList { get; }
     public ReactiveCommand<Unit, Unit> RemoveFromCastingList { get; }
@@ -32,16 +37,17 @@ public class CastingListViewModel : ViewModelBase
     private CastingActor SelectedCastingActor => CastingActors[SelectedActorIdx];
     private CastingList SelectedCastingList => CastingLists[SelectedIdx];
 
-    public CastingListViewModel(ApplicationContext _db, IScreen screen) :
-        base(_db, screen)
+    public CastingListViewModel(IScreen screen) :
+        base(screen)
     {
-
+        // select casting lists with eager loading
         CastingLists = new(
             db.CastingLists
             .Include(e => e.Movie)
             .Include(e => e.CastingActor)
             .ToList()
         );
+        // loading movies & actors
         Movies = new(db.Movies);
         CastingActors = new(db.CastingActors);
 
@@ -70,6 +76,7 @@ public class CastingListViewModel : ViewModelBase
             "Select actor to cast!"
         );
 
+        // init commands
         AddToCastingList = ReactiveCommand.Create(_addToCastingList, this.IsValid());
         UpdateInCastingList = ReactiveCommand.Create(_updateInCastingList, Observable.CombineLatest(
             this.IsValid(), this.WhenAnyValue(x => x.SelectedIdx, x => 0 <= x && x < CastingLists.Count),

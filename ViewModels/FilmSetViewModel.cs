@@ -27,13 +27,15 @@ public class FilmSetViewModel : ViewModelBase
     private Movie SelectedMovie() => Movies[SelectedMovieIdx];
     private FilmSet SelectedFilmSet() => FilmSets[SelectedIdx];
 
-    public FilmSetViewModel(ApplicationContext _db, IScreen screen) : base(_db, screen)
+    public FilmSetViewModel(IScreen screen) : base(screen)
     {
+        // loading film sets with eager loading for movie
         FilmSets = new(db.FilmSets
             .Include(e => e.Movie)
             .ToList()
         );
 
+        // all movies
         Movies = new(db.Movies);
 
         // validation
@@ -49,6 +51,7 @@ public class FilmSetViewModel : ViewModelBase
             "Select movie!"
         );
 
+        // init commands
         AddFilmSet = ReactiveCommand.Create(_addFilmSet, this.IsValid());
         UpdateFilmSet = ReactiveCommand.Create(_updateFilmSet, Observable.CombineLatest(
             this.IsValid(), this.WhenAnyValue(x => x.SelectedIdx, x => 0 <= x && x < FilmSets.Count),

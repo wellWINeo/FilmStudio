@@ -12,16 +12,20 @@ namespace FilmStudio.ViewModels;
 
 public class PropsViewModel : ViewModelBase
 {
+    // sources
     public ObservableCollection<Props> Props { get; set; }
     public ObservableCollection<FilmSet> FilmSets { get; set; }
 
+    // attributes
     [Reactive] public string Title { get; set; }
     [Reactive] public string Description { get; set; }
     [Reactive] public int Quantity { get; set; }
 
+    // indexes
     [Reactive] public int SelectedIdx { get; set; }
     [Reactive] public int SelectedFilmSetIdx { get; set; }
 
+    // commands
     public ReactiveCommand<Unit, Unit> AddProps { get; }
     public ReactiveCommand<Unit, Unit> UpdateProps { get; }
     public ReactiveCommand<Unit, Unit> RemoveProps { get; }
@@ -29,14 +33,16 @@ public class PropsViewModel : ViewModelBase
     private Props SelectedProps() => Props[SelectedIdx];
     private FilmSet SelectedFilmSet() => FilmSets[SelectedFilmSetIdx];
 
-    public PropsViewModel(ApplicationContext _db, IScreen screen) : base(_db, screen)
+    public PropsViewModel(IScreen screen) : base(screen)
     {
+        // loading props with eager loading for filmset and movie
         Props = new(db.Props
             .Include(e => e.FilmSet)
             .ThenInclude(e => e.Movie)
             .ToList()
         );
 
+        // all film sets
         FilmSets = new(db.FilmSets.Include(e => e.Movie).ToList());
 
         // validation
@@ -64,6 +70,7 @@ public class PropsViewModel : ViewModelBase
             "Choose film set!"
         );
 
+        // init commands
         AddProps = ReactiveCommand.Create(_addProps, this.IsValid());
         UpdateProps = ReactiveCommand.Create(_updateProps, Observable.CombineLatest(
             this.IsValid(), this.WhenAnyValue(x => x.SelectedIdx, x => 0 <= x && x < Props.Count),

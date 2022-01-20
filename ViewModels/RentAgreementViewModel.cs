@@ -39,8 +39,9 @@ public class RentAgreementViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> UpdateRentAgreement { get; }
     public ReactiveCommand<Unit, Unit> RemoveRentAgreement { get; }
 
-    public RentAgreementViewModel(ApplicationContext _db, IScreen screen) : base(_db, screen)
+    public RentAgreementViewModel(IScreen screen) : base(screen)
     {
+        // loading agreements with eager loading
         RentAgreements = new(db.RentAgreements
             .Include(e => e.Cinema)
             .Include(e => e.Movie)
@@ -48,6 +49,7 @@ public class RentAgreementViewModel : ViewModelBase
         Movies = new(db.Movies);
         Cinemas = new(db.Cinemas);
 
+        // validation
         this.ValidationRule(
             vm => vm.RentStartDate,
             value => value != null,
@@ -78,13 +80,15 @@ public class RentAgreementViewModel : ViewModelBase
             "Choose movie!"
         );
 
+        // init commands
         AddRentAgreement = ReactiveCommand.Create(_addRentAgreement, this.IsValid());
         UpdateRentAgreement = ReactiveCommand.Create(_updateRentAgreement, Observable.CombineLatest(
             this.IsValid(), this.WhenAnyValue(x => x.SelectedIdx, x => 0 <= x && x < RentAgreements.Count),
             (x, y) => x && y
+        // checks is data valid & agreement selected in grid for update
         ));
         RemoveRentAgreement = ReactiveCommand.Create(_removeRentAgreement, this.WhenAnyValue(
-            x => x.SelectedIdx, x => 0 <= x && x < RentAgreements.Count
+            x => x.SelectedIdx, x => 0 <= x && x < RentAgreements.Count // is index valid
         ));
     }
 

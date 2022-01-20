@@ -11,11 +11,13 @@ namespace FilmStudio.ViewModels;
 
 public class MovieViewModel : ViewModelBase
 {
+    // sources
     public ObservableCollection<Movie> Movies { get; set; }
     public Array ListOfStatuses { get; set; } = Enum.GetValues(typeof(MovieStatus));
 
     [Reactive] public int SelectedMovieIndex { get; set; }
 
+    // attributes
     [Reactive] public string Title { get; set; }
     [Reactive] public string Description { get; set; }
     [Reactive] public int ReleaseYear { get; set; }
@@ -26,10 +28,11 @@ public class MovieViewModel : ViewModelBase
     public ReactiveCommand<Unit, Unit> RemoveMovie { get; }
 
 
-    public MovieViewModel(ApplicationContext _db, IScreen screen) : base(_db, screen)
+    public MovieViewModel(IScreen screen) : base(screen)
     {
         Movies = new(db.Movies);
 
+        // validation
         this.ValidationRule(
             vm => vm.Title,
             title => !string.IsNullOrWhiteSpace(title),
@@ -48,6 +51,7 @@ public class MovieViewModel : ViewModelBase
             "Year must greater than 0"
         );
 
+        // commands
         AddMovie = ReactiveCommand.Create(_addMovie, this.IsValid());
         UpdateMovie = ReactiveCommand.Create(_updateMovie, Observable.CombineLatest(
             this.IsValid(), this.WhenAnyValue(x => x.SelectedMovieIndex, x => 0 <= x && x < Movies.Count),
